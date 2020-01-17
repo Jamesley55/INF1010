@@ -45,7 +45,7 @@ namespace
         return NOMS_PAYS[index];
     }
 } // namespace
-
+// git 
 // TODO: Constructeur par paramètre en utilisant la liste d'initialisation
 // Utiliser CAPACITE_PAYS_INITIALE pour la taille initiale de paysRestreints_
 // (allocation dynamique!)
