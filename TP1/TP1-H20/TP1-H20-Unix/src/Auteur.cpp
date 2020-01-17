@@ -35,5 +35,5 @@ unsigned int Auteur::getNbFilms()const
 // TODO setNbFilms(unsigned int nbFilms): Set le nombre de films de l'auteur
 void Auteur::setNbFilms(unsigned int nbFilms) 
 {
-    nbFilms_ = nbFilms_; 
+    nbFilms_ = nbFilms; 
 }

@@ -53,7 +53,7 @@ Film::Film(const std::string& nom, unsigned int anneeDeSortie, Genre genre, Pays
 bool estRestreintParAge, Auteur* auteur)
 {
    nom_ = nom;
-   anneeDeSortie = anneeDeSortie_; 
+   anneeDeSortie_ = anneeDeSortie; 
    genre_ = genre;
    pays_ = pays;
    estRestreintParAge_ =estRestreintParAge;
@@ -75,6 +75,7 @@ void Film::ajouterPaysRestreint(Pays pays)
     // (AUGMENTATION_CAPACITE_PAYS) Ajouter le pays au tableau Utiliser
     // std::make_unique<Pays[]> ainsi que std::move pour transférer le ownership
     // du tableau temporaire vers le tableau membre paysRestreints_;
+    // git essai 
     if(nbPaysRestreints_ == capacitePaysRestreints_)
     {
         capacitePaysRestreints_*=AUGMENTATION_CAPACITE_PAYS;
