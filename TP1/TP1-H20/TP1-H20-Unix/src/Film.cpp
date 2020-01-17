@@ -132,6 +132,10 @@ void Film::afficher(std::ostream& stream) const
 }
 
 // TODO getGenre() const: Retourner le genre
+Film::Genre Film::getGenre() const
+{
+     return genre_; 
+}
 
 // TODO estRestreintParAge() const const: Retourner si le film est restreint par
 // l'âge
