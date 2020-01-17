@@ -2,7 +2,7 @@
 
 // TODO: Inclure la définition de la classe appropriée
 #include <iostream>
-
+#include "Auteur.h"
 // TODO: Constructeur par paramètre en utilisant la liste d'initialisation
 
 //! Méthode qui affiche un auteur.
@@ -15,9 +15,25 @@ void Auteur::afficher(std::ostream& stream) const
 }
 
 // TODO getNom() const: Retourner le nom
+const std::string& Auteur::getNom() const 
+{
+    return nom_; 
+}
 
 // TODO getAnneeDeNaissance() const: Retourner l'annee de naissance
-
+unsigned int Auteur::getAnneeDeNaissance() const 
+{  
+   return anneeDeNaissance_; 
+}
 // TODO getNbFilms() const: Retourner le nombre de films de l'auteur
 
+unsigned int Auteur::getNbFilms()const 
+{
+    return nbFilms_;
+}
+
 // TODO setNbFilms(unsigned int nbFilms): Set le nombre de films de l'auteur
+void Auteur::setNbFilms(unsigned int nbFilms) 
+{
+    nbFilms_ = nbFilms_; 
+}

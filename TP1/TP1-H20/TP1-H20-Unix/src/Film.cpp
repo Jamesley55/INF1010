@@ -4,6 +4,7 @@
 #include <iostream>
 #include "Pays.h"
 #include "typesafe_enum.h"
+#include "Film.h"
 
 namespace
 {
@@ -48,6 +49,19 @@ namespace
 // TODO: Constructeur par paramètre en utilisant la liste d'initialisation
 // Utiliser CAPACITE_PAYS_INITIALE pour la taille initiale de paysRestreints_
 // (allocation dynamique!)
+Film::Film(const std::string& nom, unsigned int anneeDeSortie, Genre genre, Pays pays,
+bool estRestreintParAge, Auteur* auteur)
+{
+   nom_ = nom;
+   anneeDeSortie = anneeDeSortie_; 
+   genre_ = genre;
+   pays_ = pays;
+   estRestreintParAge_ =estRestreintParAge;
+   auteur_ =auteur;
+    paysRestreints_ = std::make_unique<Pays[]>(CAPACITE_PAYS_INITIALE);
+    nbPaysRestreints_ = 0;
+    capacitePaysRestreints_ = CAPACITE_PAYS_INITIALE;
+}
 
 //! Méthode qui ajoute un pays à liste des pays restreints du film.
 //! \param pays Pays à ajouter à la liste.
@@ -61,13 +75,43 @@ void Film::ajouterPaysRestreint(Pays pays)
     // (AUGMENTATION_CAPACITE_PAYS) Ajouter le pays au tableau Utiliser
     // std::make_unique<Pays[]> ainsi que std::move pour transférer le ownership
     // du tableau temporaire vers le tableau membre paysRestreints_;
+    if(nbPaysRestreints_ == capacitePaysRestreints_)
+    {
+        capacitePaysRestreints_*=AUGMENTATION_CAPACITE_PAYS;
+
+       std::unique_ptr<Pays[]> NouvelleRepo = std::make_unique<Pays[]>(capacitePaysRestreints_);
+       NouvelleRepo[0] = pays;
+       for(size_t i =0; i < capacitePaysRestreints_; i++)
+       {
+           NouvelleRepo[i+1]=paysRestreints_[i];
+       }
+       paysRestreints_ = std::move(NouvelleRepo);
+    }
+    
 }
 
 // TODO supprimerPaysRestreints()
+void Film::supprimerPaysRestreints()
+{
+    nbPaysRestreints_ = 0; 
+}
 
 // TODO estRestreintDansPays(Pays pays) const
 // Chercher si le pays en paramètre se retrouve dans la liste des pays
 // restreints.
+
+bool Film::estRestreintDansPays(Pays pays) const 
+{
+    for(size_t i = 0 ; i< capacitePaysRestreints_; i++)
+    {
+        if(paysRestreints_[i]== pays)
+        {
+             return true; 
+        }
+    }
+    return false; 
+
+}
 
 //! Méthode qui affiche le film.
 //! \param stream Le stream dans lequel afficher.
@@ -90,7 +134,18 @@ void Film::afficher(std::ostream& stream) const
 
 // TODO estRestreintParAge() const const: Retourner si le film est restreint par
 // l'âge
+bool Film::estRestreintParAge() const 
+{
+    return estRestreintParAge_;
+}
 
 // TODO getNom() const: Retourner le nom du film
-
+  const std::string& Film::getNom() const 
+  {
+      return nom_;
+  }
 // TODO getAuteur(): Retourner l'auteur du film
+Auteur* Film::getAuteur() {
+
+    return auteur_;
+}

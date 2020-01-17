@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <iostream>
 #include <sstream>
+#include"GestionnaireAuteurs.h"
 
 // TODO: Constructeur par défault en utilisant la liste d'initialisation
 
