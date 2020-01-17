@@ -5,8 +5,9 @@
 #include <iomanip>
 #include <iostream>
 #include <sstream>
+#include<string>
 #include"GestionnaireAuteurs.h"
-
+ using namespace std; 
 // TODO: Constructeur par défault en utilisant la liste d'initialisation
  GestionnaireAuteurs::GestionnaireAuteurs()
  {
@@ -17,6 +18,19 @@
 // TODO ajouterAuteur(const Auteur& auteur)
 // Ajouter un auteur au tableau des auteurs.
 // Retourner false si il n'y a plus de place dans le tableau.
+bool GestionnaireAuteurs::ajouterAuteur(const Auteur& auteur)
+{
+     if(nbAuteurs_ >= NB_AUTEURS_MAX)
+     {
+         return false; 
+     }
+     else
+     {
+         auteurs_[nbAuteurs_+1]=auteur; 
+         return true; 
+     }
+}
+
 
 bool GestionnaireAuteurs::ajouterAuteur(const Auteur& auteur)
 {
@@ -27,6 +41,21 @@ bool GestionnaireAuteurs::ajouterAuteur(const Auteur& auteur)
 
 
 // TODO chercherAuteur(const std::string& nomAuteur)
+ Auteur* GestionnaireAuteurs::chercherAuteur(const std::string& nomAuteur)
+ {
+         for(int i =0; i< nbAuteurs_; i++)
+         {
+             if(auteurs_[i].getNom()==nomAuteur)
+             {
+                    
+                    return &auteurs_[i]; 
+                    
+             }
+             else{
+                 return nullptr; 
+             }
+         }
+ }
 // Chercher dans la liste des auteurs si un auteur comporte le nom passé en
 // paramètre. Retourner un nullptr si ce n'est pas le cas.
 
@@ -39,10 +68,21 @@ bool GestionnaireAuteurs::chargerDepuisFichier(const std::string& nomFichier)
     if (fichier)
     {
         // TODO: envoyer chaque ligne à lireLigneAuteur
+         string ligne ; 
+        while (getline(fichier,ligne))
+        {
+            lireLigneAuteur(ligne); 
+        }
+        
+            
+
     }
+     else {
     std::cerr << "Le fichier " << nomFichier
               << " n'existe pas. Assurez vous de le mettre au bon endroit.\n";
     return false;
+     }
+
 }
 
 //! Méthode qui affiche la liste des auteurs.
