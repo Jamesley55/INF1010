@@ -7,6 +7,7 @@
 #include <sstream>
 #include "debogageMemoire.h"
 #include "typesafe_enum.h"
+#include "Librairie.h"
 
 namespace
 {

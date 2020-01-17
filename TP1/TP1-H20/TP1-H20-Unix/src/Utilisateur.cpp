@@ -1,7 +1,7 @@
 // TODO: Faire l'entête de fichier
 
 // TODO: Inclure la définition de la classe appropriée
-
+#include "Utilisateur.h"
 // TODO: Constructeur utilisant la liste d'initialisation
 
 //! Méthode qui retourne si le film est disponible pour un utilisateur.
