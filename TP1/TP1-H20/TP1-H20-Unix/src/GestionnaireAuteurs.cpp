@@ -8,10 +8,23 @@
 #include"GestionnaireAuteurs.h"
 
 // TODO: Constructeur par défault en utilisant la liste d'initialisation
+ GestionnaireAuteurs::GestionnaireAuteurs()
+ {
+     nbAuteurs_=0;
+
+ }
 
 // TODO ajouterAuteur(const Auteur& auteur)
 // Ajouter un auteur au tableau des auteurs.
 // Retourner false si il n'y a plus de place dans le tableau.
+
+bool GestionnaireAuteurs::ajouterAuteur(const Auteur& auteur)
+{
+    
+    
+    return true;
+}
+
 
 // TODO chercherAuteur(const std::string& nomAuteur)
 // Chercher dans la liste des auteurs si un auteur comporte le nom passé en
