@@ -18,10 +18,20 @@ namespace
 // TODO: Constructeur par défault en utilisant la liste d'initialisation
 // Utiliser CAPACITE_FILMS_INITIALE pour la taille initiale de films_
 // (allocation dynamique!)
+Librairie::Librairie()
+{
+    nbFilms_ = 0;
+    capaciteFilms_ = CAPACITE_FILMS_INITIALE; 
+}
 
 // TODO: Destructeur
 // Faire appel à la fonction supprimerFilms()
 // Ne pas oublier de désallouer le tableau ET les films
+Librairie::~Librairie()
+{
+
+}
+
 
 //! Méthode qui ajoute un film à la liste des films.
 //! \param film Le film alloué dynamiquement à ajouter à la liste. La classe
@@ -34,6 +44,15 @@ void Librairie::ajouterFilm(Film* film)
     // TODO
     // Verifier si assez de mémoire est allouée
     // Si pas assez de mémoire, doubler la taille du tableau
+    if(nbFilms_ == capaciteFilms_)
+    {
+        capaciteFilms_*=AUGMENTATION_CAPACITE_FILMS; 
+        if(film != nullptr)
+        { 
+            films_[nbFilms_] = film;
+            nbFilms_++; 
+        }
+    }
     // (AUGMENTATION_CAPACITE_FILMS) Ajouter le film au tableau seulement si film
     // n'est pas un nullptr
 }
@@ -42,11 +61,32 @@ void Librairie::ajouterFilm(Film* film)
 // Retirer un film ayant le même nom que celui envoyé en paramètre
 // Si le film n'existe pas, ne rien faire
 // Faire appel à la fonction trouverIndexFilm
+void Librairie::retirerFilm(const std::string& nomFilm)
+{
+      if(trouverIndexFilm(nomFilm) != -1){
+      int index = trouverIndexFilm(nomFilm);
+      films_[index] = NULL;
+      }
+
+
+}
 
 // TODO chercherFilm(const std::string& nomFilm)
 // Retourner un pointeur vers le film recherché
 // Si le film n'existe pas, retourner nullptr
 // Utiliser la fonction trouverIndexFilm
+Film* Librairie::chercherFilm(const std::string& nomFilm) {
+
+            if(trouverIndexFilm(nomFilm)!= -1)
+            {
+            int index = trouverIndexFilm(nomFilm);
+             return films_[index]; 
+            }   
+            else {
+                return nullptr; 
+            }     
+}
+
 
 //! Méthode qui charge les films à partir d'un fichier.
 //! \param nomFichier           Le nom du fichier à lire.
@@ -97,9 +137,16 @@ void Librairie::afficher(std::ostream& stream) const
 }
 
 // TODO getNbFilms() const: Retourner le nombre de films
-
+std::size_t Librairie::getNbFilms() const
+{
+       return nbFilms_;
+}
 // TODO supprimerFilms()
 // Supprimer les films du tableau (delete)
+void Librairie::supprimerFilms()
+{
+
+}
 
 //! Méthode qui ajoute les restrictions d'un film avec un string.
 //! \param ligne Le string comportant les restrictions du film.
@@ -146,3 +193,14 @@ bool Librairie::lireLigneFilm(const std::string& ligne, GestionnaireAuteurs& ges
 // TODO: trouverIndexFilm(const std::string& nomFilm) const
 // Retourner l'indexe du film comportant le nom envoyé en paramètre
 // Si le film n'existe pas, retourner -1 (FILM_INEXSISTANT)
+
+int Librairie::trouverIndexFilm(const std::string& nomFilm) const 
+{
+    for(std::size_t i = 0; i < nbFilms_; i++)
+    {
+        if(nomFilm == films_[i]->getNom())
+        {
+            return i; 
+        }
+    }
+}

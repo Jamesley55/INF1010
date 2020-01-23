@@ -98,7 +98,10 @@ void GestionnaireAuteurs::afficher(std::ostream& stream) const
 }
 
 // TODO getNbAuteurs() const: Retourner le nombre d'auteurs dans la liste
+std::size_t GestionnaireAuteurs::getNbAuteurs() const {
 
+return nbAuteurs_; 
+}
 //! Méthode qui ajoute un auteur avec un string.
 //! \param ligne Le string qui comporte tous les attributs de l'auteur.
 bool GestionnaireAuteurs::lireLigneAuteur(const std::string& ligne)
