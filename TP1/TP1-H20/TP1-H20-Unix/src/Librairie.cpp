@@ -19,8 +19,7 @@ namespace
 // Utiliser CAPACITE_FILMS_INITIALE pour la taille initiale de films_
 // (allocation dynamique!)
 Librairie::Librairie()
-{
-    nbFilms_ = 0;
+{   nbFilms_ = 0;
     capaciteFilms_ = CAPACITE_FILMS_INITIALE; 
 }
 
@@ -29,7 +28,7 @@ Librairie::Librairie()
 // Ne pas oublier de désallouer le tableau ET les films
 Librairie::~Librairie()
 {
-
+   
 }
 
 
@@ -49,7 +48,16 @@ void Librairie::ajouterFilm(Film* film)
         capaciteFilms_*=AUGMENTATION_CAPACITE_FILMS; 
         if(film != nullptr)
         { 
+            nbFilms_++; 
             films_[nbFilms_] = film;
+             
+        }
+    }
+    else{
+
+        if(film != nullptr)
+        {
+            films_[nbFilms_] = film; 
             nbFilms_++; 
         }
     }
@@ -66,7 +74,12 @@ void Librairie::retirerFilm(const std::string& nomFilm)
       if(trouverIndexFilm(nomFilm) != FILM_INEXSISTANT){
       int index = trouverIndexFilm(nomFilm);
       films_[index] = NULL;
+         for(index; index <= capaciteFilms_; index++)
+         {
+             films_[index]= films_[index +1]; 
+         }
       }
+      
 
 
 }
@@ -77,7 +90,7 @@ void Librairie::retirerFilm(const std::string& nomFilm)
 // Utiliser la fonction trouverIndexFilm
 Film* Librairie::chercherFilm(const std::string& nomFilm) {
 
-            if(trouverIndexFilm(nomFilm)!= -1)
+            if(trouverIndexFilm(nomFilm)!= FILM_INEXSISTANT)
             {
             int index = trouverIndexFilm(nomFilm);
              return films_[index]; 
@@ -102,6 +115,8 @@ bool Librairie::chargerFilmsDepuisFichier(const std::string& nomFichier,
     if (fichier)
     {
         // TODO
+
+        lireLigneFilm()
     }
     std::cerr << "Le fichier " << nomFichier
               << " n'existe pas. Assurez vous de le mettre au bon endroit.\n";
@@ -118,6 +133,8 @@ bool Librairie::chargerRestrictionsDepuisFichiers(const std::string& nomFichier)
     if (fichier)
     {
         // TODO
+
+
     }
     std::cerr << "Le fichier " << nomFichier
               << " n'existe pas. Assurez vous de le mettre au bon endroit.\n";
@@ -144,8 +161,8 @@ std::size_t Librairie::getNbFilms() const
 // TODO supprimerFilms()
 // Supprimer les films du tableau (delete)
 void Librairie::supprimerFilms()
-{
-
+{ 
+        nbFilms_= 0; 
 }
 
 //! Méthode qui ajoute les restrictions d'un film avec un string.
@@ -188,6 +205,22 @@ bool Librairie::lireLigneFilm(const std::string& ligne, GestionnaireAuteurs& ges
     // Utiliser l'opérateur d'extraction (>>) pour retrouver les attributs du
     // films Si l'auteur n'existe pas, retourner false Utiliser la fonction
     // ajouter film
+    stream >> std::quoted(nomFilm) >> anneeSortie >> genreValeurEnum >> paysValeurEnum >>
+    estRestreintParAge >> std::quoted(nomAuteur); 
+      
+    if(gestionnaireAuteurs.chercherAuteur(nomAuteur) == nullptr)
+    {
+        return false; 
+    }
+    else {
+
+        Film NouveauFilm(nomFilm, anneeSortie, 
+        genreValeurEnum, paysValeurEnum, 
+        estRestreintParAge, gestionnaireAuteurs.chercherAuteur(nomAuteur)); 
+        return true; 
+        
+    }
+
 }
 
 // TODO: trouverIndexFilm(const std::string& nomFilm) const
