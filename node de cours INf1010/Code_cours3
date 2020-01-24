@@ -1,0 +1,62 @@
+1- Rappel + vector 
+2- Surcharge operateur
+
+
+// pour declarer un vecteur
+#include <vector>
+int main()
+{
+   // const Vector<int> v = { 1,2,3}
+   v[0];// const int&
+  
+  // popular function 
+  v.size();
+  v.push_back(42); 
+  v.pop_back(); 
+
+} 
+
+
+// implementation class Vector 
+class vector{
+
+    private:
+     int taille = 0; 
+     int capaciter = 0; 
+     *A valeur; 
+
+}
+    // explication double pointer; 
+     Double pointer exemple   (**A) Valeur  c'est comme dire chacune des cases  on un pointer 
+  
+     visualisatioN --------> [[A*][A*][A*][A*][A*][A*][A*]]   TABLEAU DE POINTER 
+     exemple valeur[0] est egal a A*; 
+
+     // explication simple pointer;
+     simple pointer  (*A)  Valeur 
+     visualisation --------> [[A][A][A][A][A][A][A]]
+
+
+     // const definition a l'interieur d'une class 
+     ex  Fraction ajouter(std::string& string) const 
+         dans cette fonction le const veut dire que aucun des variable interne de la class Fraction 
+         va etre modifier; 
+
+
+         une exemple de la function string Francction::getString() 
+         elle doit avoir un const a la fin pour dire que les methode ne peut pas etre modifiable;
+         dont la bonne facon de l'ecrire c'est Fraction::getString() const ;
+         comme ca on est sure que la variable (string_) n'est  pas modifier 
+
+         un autre exemple flagrant la fontion  Fraction operator+(const& fraction) const; 
+         ca passe le methode par reference mais ca ne le modifie pas les valeur interne de la class 
+         Fraction!! comme ca la valeur de "fraction" qui serais retourner va etre modifier 
+         mais pas la variable fraction_ a l'interieur de la class meme si on a fais des modification
+         de la variable fraction_ dans la fonction;!!!!!!!!
+
+
+
+    // operator overload 
+
+
+

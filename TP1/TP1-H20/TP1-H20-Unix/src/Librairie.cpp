@@ -63,7 +63,7 @@ void Librairie::ajouterFilm(Film* film)
 // Faire appel à la fonction trouverIndexFilm
 void Librairie::retirerFilm(const std::string& nomFilm)
 {
-      if(trouverIndexFilm(nomFilm) != -1){
+      if(trouverIndexFilm(nomFilm) != FILM_INEXSISTANT){
       int index = trouverIndexFilm(nomFilm);
       films_[index] = NULL;
       }

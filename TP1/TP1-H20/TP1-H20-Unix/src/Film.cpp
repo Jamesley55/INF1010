@@ -49,18 +49,18 @@ namespace
 // Utiliser CAPACITE_PAYS_INITIALE pour la taille initiale de paysRestreints_
 // (allocation dynamique!)
 Film::Film(const std::string& nom, unsigned int anneeDeSortie, Genre genre, Pays pays,
-bool estRestreintParAge, Auteur* auteur)
-{
-   nom_ = nom;
-   anneeDeSortie_ = anneeDeSortie; 
-   genre_ = genre;
-   pays_ = pays;
-   estRestreintParAge_ =estRestreintParAge;
-   auteur_ =auteur;
-    paysRestreints_ = std::make_unique<Pays[]>(CAPACITE_PAYS_INITIALE);
-    nbPaysRestreints_ = 0;
-    capacitePaysRestreints_ = CAPACITE_PAYS_INITIALE;
-}
+bool estRestreintParAge, Auteur* auteur):
+
+   nom_(nom),
+   anneeDeSortie_(anneeDeSortie), 
+   genre_(genre),
+   pays_(pays),
+   estRestreintParAge_(estRestreintParAge),
+   auteur_(auteur),
+    paysRestreints_(std::make_unique<Pays[]>(CAPACITE_PAYS_INITIALE)),
+    nbPaysRestreints_(0),
+    capacitePaysRestreints_(CAPACITE_PAYS_INITIALE)
+{}
 
 //! Méthode qui ajoute un pays à liste des pays restreints du film.
 //! \param pays Pays à ajouter à la liste.
