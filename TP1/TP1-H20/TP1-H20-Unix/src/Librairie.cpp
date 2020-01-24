@@ -8,6 +8,8 @@
 #include "debogageMemoire.h"
 #include "typesafe_enum.h"
 #include "Librairie.h"
+#include <string>
+using namespace std;
 
 namespace
 {
@@ -102,6 +104,12 @@ bool Librairie::chargerFilmsDepuisFichier(const std::string& nomFichier,
     if (fichier)
     {
         // TODO
+        supprimerFilms();
+        string ligne;
+        while(getline(fichier,ligne)){
+            lireLigneFilm(ligne,gestionnaireAuteurs);
+            return true ;
+        }
     }
     std::cerr << "Le fichier " << nomFichier
               << " n'existe pas. Assurez vous de le mettre au bon endroit.\n";
@@ -118,6 +126,10 @@ bool Librairie::chargerRestrictionsDepuisFichiers(const std::string& nomFichier)
     if (fichier)
     {
         // TODO
+        string ligne;
+        while(getline(fichier,ligne)){
+            lireLigneRestrictions(ligne);
+            return true ;
     }
     std::cerr << "Le fichier " << nomFichier
               << " n'existe pas. Assurez vous de le mettre au bon endroit.\n";
