@@ -222,9 +222,9 @@ bool Librairie::lireLigneFilm(const std::string& ligne, GestionnaireAuteurs& ges
     }
     else {
 
-        Film NouveauFilm(nomFilm, anneeSortie, 
+        /*Film NouveauFilm(nomFilm, anneeSortie, 
         genreValeurEnum, paysValeurEnum, 
-        estRestreintParAge, gestionnaireAuteurs.chercherAuteur(nomAuteur)); 
+        estRestreintParAge, gestionnaireAuteurs.chercherAuteur(nomAuteur)); */
         return true; 
         
     }
