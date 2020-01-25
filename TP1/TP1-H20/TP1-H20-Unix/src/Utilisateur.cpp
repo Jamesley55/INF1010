@@ -2,7 +2,12 @@
 
 // TODO: Inclure la définition de la classe appropriée
 #include "Utilisateur.h"
+#include <string>
+using namespace std;
 // TODO: Constructeur utilisant la liste d'initialisation
+Utilisateur::Utilisateur(const std::string& nom, unsigned int age, bool estPremium, Pays pays):nom_(nom), age_(age), estPremium_(estPremium), pays_(pays)
+{
+}
 
 //! Méthode qui retourne si le film est disponible pour un utilisateur.
 //! \param film Le film à évaluer.

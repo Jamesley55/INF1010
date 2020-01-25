@@ -48,12 +48,21 @@ void Librairie::ajouterFilm(Film* film)
     if(nbFilms_ == capaciteFilms_)
     {
         capaciteFilms_*=AUGMENTATION_CAPACITE_FILMS; 
+
+        Film** temp= new Film*[capaciteFilms_];
+        for(std::size_t i= 0; i<nbFilms_; i++){
+            
+            temp[i] = films_[i];
+        }
         if(film != nullptr)
         { 
-            nbFilms_++; 
-            films_[nbFilms_] = film;
+            temp[nbFilms_] = film;
+            nbFilms_++;
              
         }
+    }
+    for(std::size_t i = 0; i<nbFilms_;i++){
+        delete
     }
     else{
 
@@ -139,6 +148,12 @@ bool Librairie::chargerRestrictionsDepuisFichiers(const std::string& nomFichier)
     if (fichier)
     {
         // TODO
+
+         for(std::size_t i=0; i< nbFilms_; i++){
+             films_[i]->supprimerPaysRestreints();
+
+         }
+
         string ligne;
         while(getline(fichier,ligne)){
             lireLigneRestrictions(ligne);
@@ -170,6 +185,12 @@ std::size_t Librairie::getNbFilms() const
 // Supprimer les films du tableau (delete)
 void Librairie::supprimerFilms()
 { 
+    for(std::size_t i = 0, i<nbFilms_, i++){
+
+        delete(films_[i]);
+
+    }
+
         nbFilms_= 0; 
 }
 
@@ -242,6 +263,9 @@ int Librairie::trouverIndexFilm(const std::string& nomFilm) const
         if(nomFilm == films_[i]->getNom())
         {
             return i; 
+        }
+        else{
+            return FILM_INEXSISTANT;
         }
     }
 }
