@@ -61,10 +61,10 @@ void Librairie::ajouterFilm(Film* film)
              
         }
     }
-    for(std::size_t i = 0; i<nbFilms_;i++){
-        delete
+    for(std::size_t i = 0; i<nbFilms_; i++){
+         delete film; 
     }
-    else{
+    while(nbFilms_ != capaciteFilms_){
 
         if(film != nullptr)
         {
@@ -158,7 +158,9 @@ bool Librairie::chargerRestrictionsDepuisFichiers(const std::string& nomFichier)
         while(getline(fichier,ligne)){
             lireLigneRestrictions(ligne);
             return true ;
+         }
     }
+
     std::cerr << "Le fichier " << nomFichier
               << " n'existe pas. Assurez vous de le mettre au bon endroit.\n";
     return false;
@@ -185,7 +187,7 @@ std::size_t Librairie::getNbFilms() const
 // Supprimer les films du tableau (delete)
 void Librairie::supprimerFilms()
 { 
-    for(std::size_t i = 0, i<nbFilms_, i++){
+    for(std::size_t i = 0; i<nbFilms_; i++){
 
         delete(films_[i]);
 
@@ -234,18 +236,18 @@ bool Librairie::lireLigneFilm(const std::string& ligne, GestionnaireAuteurs& ges
     // Utiliser l'opérateur d'extraction (>>) pour retrouver les attributs du
     // films Si l'auteur n'existe pas, retourner false Utiliser la fonction
     // ajouter film
-    stream >> std::quoted(nomFilm) >> anneeSortie >> genreValeurEnum >> paysValeurEnum >>
+    stream >> std::quoted(nomFilm) >> anneeSortie >> genreValeurEnum  >> paysValeurEnum>>
     estRestreintParAge >> std::quoted(nomAuteur); 
       
     if(gestionnaireAuteurs.chercherAuteur(nomAuteur) == nullptr)
     {
         return false; 
     }
-    else {
-
-        /*Film NouveauFilm(nomFilm, anneeSortie, 
-        genreValeurEnum, paysValeurEnum, 
-        estRestreintParAge, gestionnaireAuteurs.chercherAuteur(nomAuteur)); */
+    else{
+         
+        Film NouveauFilm(nomFilm, anneeSortie, 
+        to_enum<Film::Genre>(genreValeurEnum), to_enum<Pays>(paysValeurEnum), 
+        estRestreintParAge, gestionnaireAuteurs.chercherAuteur(nomAuteur)); 
         return true; 
         
     }
