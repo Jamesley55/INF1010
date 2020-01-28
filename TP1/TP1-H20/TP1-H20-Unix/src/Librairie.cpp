@@ -30,7 +30,9 @@ Librairie::Librairie()
 // Ne pas oublier de désallouer le tableau ET les films
 Librairie::~Librairie()
 {
-   
+   supprimerFilms();
+   delete[] films_;
+   films_ = nullptr;  
 }
 
 
@@ -45,32 +47,27 @@ void Librairie::ajouterFilm(Film* film)
     // TODO
     // Verifier si assez de mémoire est allouée
     // Si pas assez de mémoire, doubler la taille du tableau
-    if(nbFilms_ == capaciteFilms_)
-    {
-        capaciteFilms_*=AUGMENTATION_CAPACITE_FILMS; 
+    if(film!= nullptr){
 
-        Film** temp= new Film*[capaciteFilms_];
-        for(std::size_t i= 0; i<nbFilms_; i++){
+
+         if(nbFilms_ == capaciteFilms_)
+        {
+        capaciteFilms_*=AUGMENTATION_CAPACITE_FILMS; 
+        Film** temp = new Film*[capaciteFilms_];
+
+           for(std::size_t i = 0; i< nbFilms_; i++){
             
             temp[i] = films_[i];
+            }
+             delete [] films_;
+             films_ = temp; 
+             temp= nullptr;
         }
-        if(film != nullptr)
-        { 
-            temp[nbFilms_] = film;
-            nbFilms_++;
-             
-        }
-    }
-    for(std::size_t i = 0; i<nbFilms_; i++){
-         delete film; 
-    }
-    while(nbFilms_ != capaciteFilms_){
-
-        if(film != nullptr)
-        {
-            films_[nbFilms_] = film; 
-            nbFilms_++; 
-        }
+        Auteur *auteur = film->getAuteur();
+        auteur->setNbFilms(auteur->getNbFilms() + 1);
+        films_[nbFilms_] = film;
+        nbFilms_++;
+    
     }
     // (AUGMENTATION_CAPACITE_FILMS) Ajouter le film au tableau seulement si film
     // n'est pas un nullptr
