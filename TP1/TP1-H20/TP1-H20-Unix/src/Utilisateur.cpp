@@ -5,8 +5,9 @@
 #include <string>
 using namespace std;
 // TODO: Constructeur utilisant la liste d'initialisation
-Utilisateur::Utilisateur(const std::string& nom, unsigned int age, bool estPremium, Pays pays):nom_(nom), age_(age), estPremium_(estPremium), pays_(pays)
-{
+Utilisateur::Utilisateur(const std::string& nom, unsigned int age, bool estPremium, Pays pays):
+nom_(nom), age_(age), estPremium_(estPremium), pays_(pays)
+{   
 }
 
 //! Méthode qui retourne si le film est disponible pour un utilisateur.
@@ -20,6 +21,18 @@ bool Utilisateur::filmEstDisponible(const Film& film) const
     // Vérifier que le film n'est pas restreint dans le pays de l'utilisateur
     // Vérifier que l'utilisateur a l'âge approprié pour regarder le film (s'il
     // est est restreint pour les moins de 16 ans).
+    if(film.estRestreintParAge() && age_ < AGE_MINIMUM_POUR_FILMS_RESTREINTS){
+    
+        return false; 
+    }
+    else if (film.estRestreintDansPays(pays_) != true)
+    {
+        return true; 
+    }
+
+
+   
+
 }
 
 // TODO nbLimiteFilmsAtteint() const
@@ -27,11 +40,37 @@ bool Utilisateur::filmEstDisponible(const Film& film) const
 // Si un utilisateur est premium, il n'y a pas de limite
 // Si un utilisateur n'est pas premium, il peut regarder au maximum
 // NB_FILMS_GRATUITS
+bool Utilisateur::nbLimiteFilmsAtteint()const{
+ 
+ if(estPremium_)
+ {
+     return false;
+ }
+ else if (nbFilmsVus_ == NB_FILMS_GRATUITS)
+ {
+     return true; 
+ }
+
+}
 
 // TODO regarderFilm(const Film& film)
 // Vérifier que l'utilisateur n'a pas atteint la limite de films qu'il peut
 // regarder Vérifier que le film est disponnible dans le pays de l'utilisateur
 // Si ces deux conditions sont remplies, incrémenter nbFilmsVus_ et retourner
 // true Sinon, retourner false
+bool Utilisateur::regarderFilm(const Film& film)
+{
+    
+    if(film.estRestreintDansPays(pays_) != true && nbFilmsVus_!= NB_FILMS_GRATUITS)
+    {
+        nbFilmsVus_++;
+        return true; 
+    }
+     return false; 
+}
 
 // TODO getNbFilmsVus() const: Retourner le nombre de films vus
+unsigned int Utilisateur::getNbFilmsVus() const 
+{
+    return nbFilmsVus_; 
+}

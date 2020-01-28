@@ -206,6 +206,20 @@ bool Librairie::lireLigneRestrictions(const std::string& ligne)
     // TODO
     // Pour extraire tout ce qui se trouve entre "" dans un stream,
     // il faut faire stream >> std::quoted(variable)
+    stream >> std::quoted(nomFilm) ; 
+    
+     int PaysValeurEnum; 
+     
+     if(trouverIndexFilm(nomFilm) != FILM_INEXSISTANT)
+     {
+            
+            while(stream >> PaysValeurEnum)
+            {
+                 films_[trouverIndexFilm(nomFilm)]->ajouterPaysRestreint(to_enum<Pays>(PaysValeurEnum));
+                 return true;
+            }
+     }
+     return false; 
     // Utiliser l'opérateur d'extraction (>>) pour retrouver le nom du film
     // Trouver le film qui comporte le nom
     // Si le film n'existe pas, retourner false
