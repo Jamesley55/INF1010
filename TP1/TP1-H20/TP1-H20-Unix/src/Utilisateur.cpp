@@ -29,6 +29,7 @@ bool Utilisateur::filmEstDisponible(const Film& film) const
     {
         return true; 
     }
+    return true; 
 
 
    
@@ -50,6 +51,7 @@ bool Utilisateur::nbLimiteFilmsAtteint()const{
  {
      return true; 
  }
+ return true;
 
 }
 

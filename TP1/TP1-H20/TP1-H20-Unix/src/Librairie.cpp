@@ -274,14 +274,14 @@ bool Librairie::lireLigneFilm(const std::string& ligne, GestionnaireAuteurs& ges
 
 int Librairie::trouverIndexFilm(const std::string& nomFilm) const 
 {
-    for(std::size_t i = 0; i < nbFilms_; i++)
+    for(int i = 0; i < nbFilms_; i++)
     {
         if(nomFilm == films_[i]->getNom())
         {
             return i; 
         }
-        else{
-            return FILM_INEXSISTANT;
-        }
+        
     }
+    return FILM_INEXSISTANT;
+
 }

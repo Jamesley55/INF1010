@@ -30,18 +30,10 @@ bool GestionnaireAuteurs::ajouterAuteur(const Auteur& auteur)
 }
 
 
-bool GestionnaireAuteurs::ajouterAuteur(const Auteur& auteur)
-{
-    
-    
-    return true;
-}
-
-
 // TODO chercherAuteur(const std::string& nomAuteur)
  Auteur* GestionnaireAuteurs::chercherAuteur(const std::string& nomAuteur)
  {
-         for(int i =0; i< nbAuteurs_; i++)
+         for(std::size_t i =0; i < nbAuteurs_; i++)
          {
              if(auteurs_[i].getNom()==nomAuteur)
              {
@@ -49,10 +41,9 @@ bool GestionnaireAuteurs::ajouterAuteur(const Auteur& auteur)
                     return &auteurs_[i]; 
                     
              }
-             else{
-                 return nullptr; 
-             }
+             
          }
+         return nullptr; 
  }
 // Chercher dans la liste des auteurs si un auteur comporte le nom passé en
 // paramètre. Retourner un nullptr si ce n'est pas le cas.
@@ -76,11 +67,11 @@ bool GestionnaireAuteurs::chargerDepuisFichier(const std::string& nomFichier)
             
 
     }
-     else {
+     
     std::cerr << "Le fichier " << nomFichier
               << " n'existe pas. Assurez vous de le mettre au bon endroit.\n";
     return false;
-     }
+     
 
 }
 

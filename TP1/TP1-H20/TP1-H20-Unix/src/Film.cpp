@@ -140,7 +140,7 @@ Film::Genre Film::getGenre() const
 // l'âge
 bool Film::estRestreintParAge() const 
 {
-    return estRestreintParAge;  
+    return estRestreintParAge_;  
 }
 
 // TODO getNom() const: Retourner le nom du film
