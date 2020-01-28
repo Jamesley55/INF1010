@@ -20,10 +20,11 @@ namespace
 // TODO: Constructeur par défault en utilisant la liste d'initialisation
 // Utiliser CAPACITE_FILMS_INITIALE pour la taille initiale de films_
 // (allocation dynamique!)
-Librairie::Librairie()
-{   nbFilms_ = 0;
-    capaciteFilms_ = CAPACITE_FILMS_INITIALE; 
-}
+Librairie::Librairie():
+ films_(new Film *[CAPACITE_FILMS_INITIALE]),
+ nbFilms_(0),
+ capaciteFilms_(CAPACITE_FILMS_INITIALE)
+{}
 
 // TODO: Destructeur
 // Faire appel à la fonction supprimerFilms()
@@ -52,10 +53,10 @@ void Librairie::ajouterFilm(Film* film)
 
          if(nbFilms_ == capaciteFilms_)
         {
-        capaciteFilms_*=AUGMENTATION_CAPACITE_FILMS; 
-        Film** temp = new Film*[capaciteFilms_];
+        capaciteFilms_ *= AUGMENTATION_CAPACITE_FILMS; 
+        Film** temp = new Film *[capaciteFilms_];
 
-           for(std::size_t i = 0; i< nbFilms_; i++){
+           for(unsigned int i = 0; i< nbFilms_; i++){
             
             temp[i] = films_[i];
             }
@@ -81,11 +82,17 @@ void Librairie::retirerFilm(const std::string& nomFilm)
 {
       if(trouverIndexFilm(nomFilm) != FILM_INEXSISTANT){
       int index = trouverIndexFilm(nomFilm);
-      films_[index] = NULL;
+      Auteur* newAuteur = films_[trouverIndexFilm(nomFilm)]->getAuteur();
+      newAuteur->setNbFilms(newAuteur->getNbFilms()-1);
+      delete films_[index]; 
+      films_[index] = nullptr;
+
          for(index; index <= capaciteFilms_; index++)
          {
-             films_[index]= films_[index +1]; 
+             films_[index]= films_[index -1]; 
+             films_[nbFilms_-1] = nullptr; 
          }
+         nbFilms_--; 
       }
       
 
@@ -127,12 +134,12 @@ bool Librairie::chargerFilmsDepuisFichier(const std::string& nomFichier,
         string ligne;
         while(getline(fichier,ligne)){
             lireLigneFilm(ligne,gestionnaireAuteurs);
-            return true ;
+            return false;
         }
     }
     std::cerr << "Le fichier " << nomFichier
               << " n'existe pas. Assurez vous de le mettre au bon endroit.\n";
-    return false;
+    return true; 
 }
 
 //! Méthode qui charge les restrictions des films à partir d'un fichier.
@@ -153,9 +160,12 @@ bool Librairie::chargerRestrictionsDepuisFichiers(const std::string& nomFichier)
 
         string ligne;
         while(getline(fichier,ligne)){
-            lireLigneRestrictions(ligne);
-            return true ;
+            if(lireLigneRestrictions(ligne))
+            {
+            return false;
+            }
          }
+         return true; 
     }
 
     std::cerr << "Le fichier " << nomFichier
@@ -186,7 +196,9 @@ void Librairie::supprimerFilms()
 { 
     for(std::size_t i = 0; i<nbFilms_; i++){
 
-        delete(films_[i]);
+        films_[i]->getAuteur()->setNbFilms(0);
+        delete films_[i];
+        films_[i]=nullptr;
 
     }
 

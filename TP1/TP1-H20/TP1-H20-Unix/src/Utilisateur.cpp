@@ -6,7 +6,7 @@
 using namespace std;
 // TODO: Constructeur utilisant la liste d'initialisation
 Utilisateur::Utilisateur(const std::string& nom, unsigned int age, bool estPremium, Pays pays):
-nom_(nom), age_(age), estPremium_(estPremium), pays_(pays)
+nom_(nom), age_(age), estPremium_(estPremium), pays_(pays), nbFilmsVus_(NB_FILMS_GRATUITS)
 {   
 }
 
@@ -25,11 +25,8 @@ bool Utilisateur::filmEstDisponible(const Film& film) const
     
         return false; 
     }
-    else if (film.estRestreintDansPays(pays_) != true)
-    {
+    
         return true; 
-    }
-    return true; 
 
 
    

@@ -57,7 +57,7 @@ bool estRestreintParAge, Auteur* auteur):
    pays_(pays),
    estRestreintParAge_(estRestreintParAge),
    auteur_(auteur),
-    paysRestreints_(std::make_unique<Pays[]>(CAPACITE_PAYS_INITIALE)),
+   paysRestreints_(std::make_unique<Pays[]>(CAPACITE_PAYS_INITIALE)),
     nbPaysRestreints_(0),
     capacitePaysRestreints_(CAPACITE_PAYS_INITIALE)
 {}
@@ -80,11 +80,11 @@ void Film::ajouterPaysRestreint(Pays pays)
         capacitePaysRestreints_*=AUGMENTATION_CAPACITE_PAYS;
 
        std::unique_ptr<Pays[]> NouvelleRepo = std::make_unique<Pays[]>(capacitePaysRestreints_);
-       NouvelleRepo[0] = pays;
-       for(size_t i =0; i < capacitePaysRestreints_; i++)
+       for(size_t i =0; i < nbPaysRestreints_; i++)
        {
-           NouvelleRepo[i+1]=paysRestreints_[i];
+           NouvelleRepo[i]=paysRestreints_[i];
        }
+       paysRestreints_ = std::make_unique<Pays[]>(capacitePaysRestreints_);
        paysRestreints_ = std::move(NouvelleRepo);
     }
     
@@ -94,6 +94,8 @@ void Film::ajouterPaysRestreint(Pays pays)
 void Film::supprimerPaysRestreints()
 {
     nbPaysRestreints_ = 0; 
+    capacitePaysRestreints_ = CAPACITE_PAYS_INITIALE;
+    paysRestreints_ = std::make_unique<Pays[]>(CAPACITE_PAYS_INITIALE);
 }
 
 // TODO estRestreintDansPays(Pays pays) const

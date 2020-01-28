@@ -10,7 +10,8 @@
  using namespace std; 
 // TODO: Constructeur par défault en utilisant la liste d'initialisation
  GestionnaireAuteurs::GestionnaireAuteurs():
- nbAuteurs_(0)
+ auteurs_({}),
+ nbAuteurs_((std::size_t) 0)
  {}
 
 // TODO ajouterAuteur(const Auteur& auteur)
@@ -24,7 +25,8 @@ bool GestionnaireAuteurs::ajouterAuteur(const Auteur& auteur)
      }
      else
      {
-         auteurs_[nbAuteurs_+1]=auteur; 
+         nbAuteurs_++;
+         auteurs_[nbAuteurs_]=auteur; 
          return true; 
      }
 }
@@ -57,13 +59,15 @@ bool GestionnaireAuteurs::chargerDepuisFichier(const std::string& nomFichier)
     if (fichier)
     {
         // TODO: envoyer chaque ligne à lireLigneAuteur
-        string ligne ; 
+        string ligne = ""; 
         while (getline(fichier,ligne))
         {
-            lireLigneAuteur(ligne); 
-            return true; 
+             if(!lireLigneAuteur(ligne))
+             {
+                 return false; 
+             }
         }
-        
+        return true;
             
 
     }
@@ -102,13 +106,16 @@ bool GestionnaireAuteurs::lireLigneAuteur(const std::string& ligne)
     // Utiliser l'opérateur d'extraction (>>) depuis le stream
     // Pour extraire tout ce qui se trouve entre "" dans un stream,
     // il faut faire stream >> std::quoted(variable)
-    stream >> std::quoted(nom) >> age; // li le nom qui se trouve entre "" et l'age 
+    if(chercherAuteur(nom)== nullptr){
+       stream >> std::quoted(nom) >> age; // li le nom qui se trouve entre "" et l'age 
     // puisque l'age est une int alors il n'y a pas de quote. 
 
-     Auteur nouvelleAuteur(nom,age); 
+      Auteur nouvelleAuteur(nom,age); 
 
       ajouterAuteur(nouvelleAuteur); 
       return true;  
+    }
+    return false; 
      
 
     
