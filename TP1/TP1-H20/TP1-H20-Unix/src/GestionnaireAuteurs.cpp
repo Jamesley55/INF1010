@@ -1,17 +1,22 @@
 // TODO: Faire l'entête de fichier
-
+/* ////////////////////////////////////////////////////////////////
+/	*TD1 : fichier Gestionnaireauteurs.cpp                        /
+/	*travail fait par Jamesley Joseph : 1990552                   /
+/					   Wael tarifi :  1991935                     /
+/                                                                 /
+/	*Date de remise : 28 janvier 2020 à 23h55                     /
+/   * Description: Implementation de la classe GestionnaireAuteurs/
+*//////////////////////////////////////////////////////////////////
 // TODO: Inclure la définition de la classe appropriée
 #include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <sstream>
-#include<string>
 #include"GestionnaireAuteurs.h"
  using namespace std; 
 // TODO: Constructeur par défault en utilisant la liste d'initialisation
  GestionnaireAuteurs::GestionnaireAuteurs():
- auteurs_({}),
- nbAuteurs_((std::size_t) 0)
+ nbAuteurs_(0)
  {}
 
 // TODO ajouterAuteur(const Auteur& auteur)
@@ -26,7 +31,7 @@ bool GestionnaireAuteurs::ajouterAuteur(const Auteur& auteur)
      else
      {
          nbAuteurs_++;
-         auteurs_[nbAuteurs_]=auteur; 
+         auteurs_[nbAuteurs_] = auteur; 
          return true; 
      }
 }
@@ -71,11 +76,13 @@ bool GestionnaireAuteurs::chargerDepuisFichier(const std::string& nomFichier)
             
 
     }
+    else{
      
     std::cerr << "Le fichier " << nomFichier
               << " n'existe pas. Assurez vous de le mettre au bon endroit.\n";
     return false;
-     
+         }
+ return false;      
 
 }
 
@@ -106,16 +113,14 @@ bool GestionnaireAuteurs::lireLigneAuteur(const std::string& ligne)
     // Utiliser l'opérateur d'extraction (>>) depuis le stream
     // Pour extraire tout ce qui se trouve entre "" dans un stream,
     // il faut faire stream >> std::quoted(variable)
-    if(chercherAuteur(nom)== nullptr){
+
        stream >> std::quoted(nom) >> age; // li le nom qui se trouve entre "" et l'age 
     // puisque l'age est une int alors il n'y a pas de quote. 
 
       Auteur nouvelleAuteur(nom,age); 
-
-      ajouterAuteur(nouvelleAuteur); 
-      return true;  
-    }
-    return false; 
+      return ajouterAuteur(nouvelleAuteur); 
+    
+   
      
 
     

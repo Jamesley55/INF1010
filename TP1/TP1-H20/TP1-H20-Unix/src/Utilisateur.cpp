@@ -1,9 +1,14 @@
 // TODO: Faire l'entête de fichier
-
+/* ////////////////////////////////////////////////////////////////
+/	*TD1 : fichier Utilisateur.cpp                                /
+/	*travail fait par Jamesley Joseph: 1990552                    /
+/					   Wael tarifi :  1991935                     /
+/                                                                 /
+/	*Date de remise : 28 janvier 2020 à 23h55                     /
+/   * Description: Implementation de la classe Utilisateur        /
+*//////////////////////////////////////////////////////////////////
 // TODO: Inclure la définition de la classe appropriée
 #include "Utilisateur.h"
-#include <string>
-using namespace std;
 // TODO: Constructeur utilisant la liste d'initialisation
 Utilisateur::Utilisateur(const std::string& nom, unsigned int age, bool estPremium, Pays pays):
 nom_(nom), age_(age), estPremium_(estPremium), pays_(pays), nbFilmsVus_(NB_FILMS_GRATUITS)

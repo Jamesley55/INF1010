@@ -1,5 +1,12 @@
 // TODO: Faire l'entête de fichier
-
+/* ////////////////////////////////////////////////////////////////
+/	*TD1 : fichier librairie.cpp                                  /
+/	*travail fait par Jamesley Joseph: 1990552                    /
+/					   Wael tarifi :  1991935                     /
+/                                                                 /
+/	*Date de remise : 28 janvier 2020 à 23h55                     /
+/   * Description: Implementation de la classe librairie          /
+*//////////////////////////////////////////////////////////////////
 // TODO: Inclure la définition de la classe appropriée
 #include <fstream>
 #include <iomanip>
@@ -8,8 +15,7 @@
 #include "debogageMemoire.h"
 #include "typesafe_enum.h"
 #include "Librairie.h"
-#include <string>
-using namespace std;
+
 
 namespace
 {
@@ -21,10 +27,11 @@ namespace
 // Utiliser CAPACITE_FILMS_INITIALE pour la taille initiale de films_
 // (allocation dynamique!)
 Librairie::Librairie():
- films_(new Film *[CAPACITE_FILMS_INITIALE]),
  nbFilms_(0),
  capaciteFilms_(CAPACITE_FILMS_INITIALE)
-{}
+{
+    films_= new Film *[CAPACITE_FILMS_INITIALE]; 
+}
 
 // TODO: Destructeur
 // Faire appel à la fonction supprimerFilms()
@@ -32,8 +39,8 @@ Librairie::Librairie():
 Librairie::~Librairie()
 {
    supprimerFilms();
-   delete[] films_;
-   films_ = nullptr;  
+   delete[] films_; // on suprime de tableau 
+   films_ = nullptr;  // on desalou la memoire du tableau 
 }
 
 
@@ -54,7 +61,7 @@ void Librairie::ajouterFilm(Film* film)
          if(nbFilms_ == capaciteFilms_)
         {
         capaciteFilms_ *= AUGMENTATION_CAPACITE_FILMS; 
-        Film** temp = new Film *[capaciteFilms_];
+        Film** temp = new Film *[ capaciteFilms_];
 
            for(unsigned int i = 0; i< nbFilms_; i++){
             
@@ -62,7 +69,7 @@ void Librairie::ajouterFilm(Film* film)
             }
              delete [] films_;
              films_ = temp; 
-             temp= nullptr;
+             temp = nullptr;
         }
         Auteur *auteur = film->getAuteur();
         auteur->setNbFilms(auteur->getNbFilms() + 1);
@@ -82,17 +89,10 @@ void Librairie::retirerFilm(const std::string& nomFilm)
 {
       if(trouverIndexFilm(nomFilm) != FILM_INEXSISTANT){
       int index = trouverIndexFilm(nomFilm);
-      Auteur* newAuteur = films_[trouverIndexFilm(nomFilm)]->getAuteur();
-      newAuteur->setNbFilms(newAuteur->getNbFilms()-1);
       delete films_[index]; 
-      films_[index] = nullptr;
-
-         for(index; index <= capaciteFilms_; index++)
-         {
-             films_[index]= films_[index -1]; 
-             films_[nbFilms_-1] = nullptr; 
-         }
-         nbFilms_--; 
+      films_[index]= films_[index-1]; 
+      films_[index-1]= nullptr;
+       nbFilms_--; 
       }
       
 
@@ -130,12 +130,19 @@ bool Librairie::chargerFilmsDepuisFichier(const std::string& nomFichier,
     if (fichier)
     {
         // TODO
-        supprimerFilms();
-        string ligne;
+        std::string ligne;
+        for (unsigned int i = 0; i < nbFilms_; i++)
+		{
+			(films_[i]->getAuteur())->setNbFilms(0);
+		}
+		supprimerFilms(); 
         while(getline(fichier,ligne)){
-            lireLigneFilm(ligne,gestionnaireAuteurs);
+            if(!lireLigneFilm(ligne,gestionnaireAuteurs))
+            {
             return false;
+            }
         }
+        return true; 
     }
     std::cerr << "Le fichier " << nomFichier
               << " n'existe pas. Assurez vous de le mettre au bon endroit.\n";
@@ -158,7 +165,7 @@ bool Librairie::chargerRestrictionsDepuisFichiers(const std::string& nomFichier)
 
          }
 
-        string ligne;
+        std::string ligne;
         while(getline(fichier,ligne)){
             if(lireLigneRestrictions(ligne))
             {
@@ -262,15 +269,14 @@ bool Librairie::lireLigneFilm(const std::string& ligne, GestionnaireAuteurs& ges
     stream >> std::quoted(nomFilm) >> anneeSortie >> genreValeurEnum  >> paysValeurEnum>>
     estRestreintParAge >> std::quoted(nomAuteur); 
       
-    if(gestionnaireAuteurs.chercherAuteur(nomAuteur) == nullptr)
-    {
-        return false; 
-    }
+    if(gestionnaireAuteurs.chercherAuteur(nomAuteur) == nullptr)  return false; 
+    
     else{
          
-        Film NouveauFilm(nomFilm, anneeSortie, 
+        Film* NouveauFilm = new Film(nomFilm, anneeSortie, 
         to_enum<Film::Genre>(genreValeurEnum), to_enum<Pays>(paysValeurEnum), 
         estRestreintParAge, gestionnaireAuteurs.chercherAuteur(nomAuteur)); 
+        ajouterFilm(NouveauFilm); 
         return true; 
         
     }
@@ -283,7 +289,7 @@ bool Librairie::lireLigneFilm(const std::string& ligne, GestionnaireAuteurs& ges
 
 int Librairie::trouverIndexFilm(const std::string& nomFilm) const 
 {
-    for(int i = 0; i < nbFilms_; i++)
+    for(unsigned int  i = 0; i < nbFilms_; i++)
     {
         if(nomFilm == films_[i]->getNom())
         {

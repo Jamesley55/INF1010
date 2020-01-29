@@ -1,5 +1,12 @@
 // TODO: Faire l'entête de fichier
-
+/* ////////////////////////////////////////////////////////////////
+/	*TD1 : fichier Film.cpp                                       /
+/	*travail fait par Jamesley Joseph : 1990552                   /
+/					   Wael tarifi :  1991935                     /
+/                                                                 /
+/	*Date de remise : 28 janvier 2020 à 23h55                     /
+/   * Description: Implementation de la classe Film               /
+*//////////////////////////////////////////////////////////////////
 // TODO: Inclure la définition de la classe appropriée
 #include <iostream>
 #include "Pays.h"
@@ -79,14 +86,11 @@ void Film::ajouterPaysRestreint(Pays pays)
     {
         capacitePaysRestreints_*=AUGMENTATION_CAPACITE_PAYS;
 
-       std::unique_ptr<Pays[]> NouvelleRepo = std::make_unique<Pays[]>(capacitePaysRestreints_);
-       for(size_t i =0; i < nbPaysRestreints_; i++)
-       {
-           NouvelleRepo[i]=paysRestreints_[i];
-       }
-       paysRestreints_ = std::make_unique<Pays[]>(capacitePaysRestreints_);
+       auto NouvelleRepo = std::make_unique<Pays[]>(capacitePaysRestreints_);
        paysRestreints_ = std::move(NouvelleRepo);
     }
+    paysRestreints_[nbPaysRestreints_] = pays;
+	nbPaysRestreints_++;
     
 }
 
@@ -94,8 +98,6 @@ void Film::ajouterPaysRestreint(Pays pays)
 void Film::supprimerPaysRestreints()
 {
     nbPaysRestreints_ = 0; 
-    capacitePaysRestreints_ = CAPACITE_PAYS_INITIALE;
-    paysRestreints_ = std::make_unique<Pays[]>(CAPACITE_PAYS_INITIALE);
 }
 
 // TODO estRestreintDansPays(Pays pays) const
@@ -106,7 +108,7 @@ bool Film::estRestreintDansPays(Pays pays) const
 {
     for(size_t i = 0 ; i< capacitePaysRestreints_; i++)
     {
-        if(paysRestreints_[i]== pays)
+        if(paysRestreints_[i] == pays)
         {
              return true; 
         }

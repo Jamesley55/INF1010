@@ -1,9 +1,18 @@
 // TODO: Faire l'entête de fichier
+/* ////////////////////////////////////////////////////////////////
+/	*TD1 : fichier Auteur.cpp                                     /
+/	*travail fait par Jamesley Joseph: 1990552                    /
+/					   Wael tarifi :  1991935                     /
+/                                                                 /
+/	*Date de remise : 28 janvier 2020 à 23h55                     /
+/   * Description: Implementation de la classe Auteur             /
+*//////////////////////////////////////////////////////////////////
 
 // TODO: Inclure la définition de la classe appropriée
 #include <iostream>
 #include "Auteur.h"
-// TODO: Constructeur par paramètre en utilisant la liste d'initialisation
+
+// TODO fait : Constructeur par paramètre en utilisant la liste d'initialisation
 Auteur::Auteur(const std::string& nom, unsigned int anneeDeNaissance): 
 nom_(nom), 
 anneeDeNaissance_(anneeDeNaissance), 
