@@ -1,4 +1,3 @@
-// TODO: Faire l'entête de fichier
 /* ////////////////////////////////////////////////////////////////
 /	*TD1 : fichier librairie.cpp                                  /
 /	*travail fait par Jamesley Joseph: 1990552                    /
@@ -7,7 +6,6 @@
 /	*Date de remise : 28 janvier 2020 à 23h55                     /
 /   * Description: Implementation de la classe librairie          /
 *//////////////////////////////////////////////////////////////////
-// TODO: Inclure la définition de la classe appropriée
 #include <fstream>
 #include <iomanip>
 #include <iostream>
@@ -23,9 +21,12 @@ namespace
     constexpr int FILM_INEXSISTANT = -1;
 } // namespace
 
-// TODO: Constructeur par défault en utilisant la liste d'initialisation
-// Utiliser CAPACITE_FILMS_INITIALE pour la taille initiale de films_
-// (allocation dynamique!)
+/****************************************************************************
+ * Fonction: Librairie:: Libraire
+ * Description:  Constructeur par defaut de la class Librairie
+ * Paramètres: aucun
+ * Retour: aucun
+ ****************************************************************************/
 Librairie::Librairie():
  nbFilms_(0),
  capaciteFilms_(CAPACITE_FILMS_INITIALE)
@@ -33,9 +34,12 @@ Librairie::Librairie():
     films_= new Film *[CAPACITE_FILMS_INITIALE]; 
 }
 
-// TODO: Destructeur
-// Faire appel à la fonction supprimerFilms()
-// Ne pas oublier de désallouer le tableau ET les films
+/****************************************************************************
+ * Fonction: Librairie:: ~Libraire
+ * Description:  Destructeur de Librairie
+ * Paramètres: aucun
+ * Retour: aucun
+ ****************************************************************************/
 Librairie::~Librairie()
 {
    supprimerFilms();
@@ -44,54 +48,70 @@ Librairie::~Librairie()
 }
 
 
-//! Méthode qui ajoute un film à la liste des films.
+
 //! \param film Le film alloué dynamiquement à ajouter à la liste. La classe
 //! devient propriétaire du
 //!             film.
+/****************************************************************************
+ * Fonction: Librairie:: ajouterFilm
+ * Description:  Methode qui ajoute un film a la liste des fims
+ * Paramètres: Film* film : le film alloue dynamiquement a ajouter a la liste
+ * Retour: aucun
+ ****************************************************************************/
 void Librairie::ajouterFilm(Film* film)
 {
     static constexpr unsigned int AUGMENTATION_CAPACITE_FILMS = 2;
 
-    // TODO
-    // Verifier si assez de mémoire est allouée
-    // Si pas assez de mémoire, doubler la taille du tableau
+    
+    
+    
     if(film!= nullptr){
 
 
-         if(nbFilms_ == capaciteFilms_)
+         if(nbFilms_ == capaciteFilms_) // Verifie si assez de mémoire est allouée
         {
-        capaciteFilms_ *= AUGMENTATION_CAPACITE_FILMS; 
-        Film** temp = new Film *[ capaciteFilms_];
+        capaciteFilms_ *= AUGMENTATION_CAPACITE_FILMS;  // si il n'ya pas assez de memoire on double la capaciter
+        Film** temp = new Film *[ capaciteFilms_]; 
 
            for(unsigned int i = 0; i< nbFilms_; i++){
             
-            temp[i] = films_[i];
+            temp[i] = films_[i]; // on envoie les valeur de lancien tableau du nouveau tableau; 
             }
-             delete [] films_;
-             films_ = temp; 
+             delete [] films_; // on desalou l'espace du lancien tableau (delete[])
+             films_ = nullptr; 
+             films_ = temp;  // on envoie les valeur du tableau temporaire au tableau film_
+             delete [] temp; // on desalou l'espace memoire de 
+             // la variable temporaire puisquelle n'est plus necessaire 
              temp = nullptr;
         }
         Auteur *auteur = film->getAuteur();
         auteur->setNbFilms(auteur->getNbFilms() + 1);
-        films_[nbFilms_] = film;
+        films_[nbFilms_] = film; //Ajouter le film au tableau seulement si film n'est pas un nullptr 
         nbFilms_++;
     
     }
-    // (AUGMENTATION_CAPACITE_FILMS) Ajouter le film au tableau seulement si film
-    // n'est pas un nullptr
+    // (AUGMENTATION_CAPACITE_FILMS) 
 }
 
-// TODO: retirerFilm(const std::string& nomFilm)
-// Retirer un film ayant le même nom que celui envoyé en paramètre
-// Si le film n'existe pas, ne rien faire
-// Faire appel à la fonction trouverIndexFilm
+/****************************************************************************
+ * Fonction: Librairie:: retirerFilm
+ * Description:  Retirer un film ayant le meme nom que celui envoye en parametre
+ * Paramètres: const std::string& nomFilm : le nom du film a retirer
+ * Retour: aucun
+ ****************************************************************************/
 void Librairie::retirerFilm(const std::string& nomFilm)
 {
-      if(trouverIndexFilm(nomFilm) != FILM_INEXSISTANT){
-      int index = trouverIndexFilm(nomFilm);
-      delete films_[index]; 
-      films_[index]= films_[index-1]; 
-      films_[index-1]= nullptr;
+      if(trouverIndexFilm(nomFilm) != FILM_INEXSISTANT){ // on s'assure que le film existe
+      int index = trouverIndexFilm(nomFilm); // on trouve lindex du film
+      delete films_[index];  // on desalou l'espace memoire du film quon veut retirer 
+      films_[index]= nullptr; 
+      
+      // on s'assure qu'il n'y a pas de trou dans le tableau 
+      // on "shift" tout les donner vers la gauche
+      for(size_t i = index + 1; i < nbFilms_; i++){
+           films_[i - 1] = films_[i];
+           films_[i] = nullptr;
+       }
        nbFilms_--; 
       }
       
@@ -99,10 +119,12 @@ void Librairie::retirerFilm(const std::string& nomFilm)
 
 }
 
-// TODO chercherFilm(const std::string& nomFilm)
-// Retourner un pointeur vers le film recherché
-// Si le film n'existe pas, retourner nullptr
-// Utiliser la fonction trouverIndexFilm
+/****************************************************************************
+ * Fonction: Librairie:: chercherFilm
+ * Description:  Retourner un vers le film recherche, si le film n'existe pas retourner nullptr
+ * Paramètres: const std:: string &nomFilm : le nom du film a rechercher
+ * Retour: (Film*) le pointeur du film a recherche
+ ****************************************************************************/
 Film* Librairie::chercherFilm(const std::string& nomFilm) {
 
             if(trouverIndexFilm(nomFilm)!= FILM_INEXSISTANT)
@@ -192,13 +214,23 @@ void Librairie::afficher(std::ostream& stream) const
     }
 }
 
-// TODO getNbFilms() const: Retourner le nombre de films
+/****************************************************************************
+ * Fonction: Librairie:: getNbFilms() const
+ * Description:  Retourne le nombre de films
+ * Paramètres: aucun
+ * Retour: (size_t) le nombre de film
+ ****************************************************************************/
 std::size_t Librairie::getNbFilms() const
 {
        return nbFilms_;
 }
-// TODO supprimerFilms()
-// Supprimer les films du tableau (delete)
+
+/****************************************************************************
+ * Fonction: Librairie:: supprimerFilms
+ * Description:  Supprimer les films du tableau
+ * Paramètres: aucun
+ * Retour: aucun
+ ****************************************************************************/
 void Librairie::supprimerFilms()
 { 
     for(std::size_t i = 0; i<nbFilms_; i++){
@@ -212,16 +244,16 @@ void Librairie::supprimerFilms()
         nbFilms_= 0; 
 }
 
-//! Méthode qui ajoute les restrictions d'un film avec un string.
-//! \param ligne Le string comportant les restrictions du film.
-//! \return      Un bool représentant si l'opération est un succès.
+/****************************************************************************
+ * Fonction: Librairie:: lireLigneRestrictions
+ * Description:  Methode qui ajoute les restrictions d'un film avec un string
+ * Paramètres: const std::string &ligne : le string comportant les restrictions du film
+ * Retour: (bool) un bool representant le succes ou non de la fonction
+ ****************************************************************************/
 bool Librairie::lireLigneRestrictions(const std::string& ligne)
 {
     std::istringstream stream(ligne);
     std::string nomFilm;
-    // TODO
-    // Pour extraire tout ce qui se trouve entre "" dans un stream,
-    // il faut faire stream >> std::quoted(variable)
     stream >> std::quoted(nomFilm) ; 
     
      int PaysValeurEnum; 
@@ -236,20 +268,16 @@ bool Librairie::lireLigneRestrictions(const std::string& ligne)
             }
      }
      return false; 
-    // Utiliser l'opérateur d'extraction (>>) pour retrouver le nom du film
-    // Trouver le film qui comporte le nom
-    // Si le film n'existe pas, retourner false
-    // Faire une boucle while (stream >> int), puis utiliser ce int pour appeler
-    // la fonction film->ajouterPaysRestreint
+    
 }
 
-//! Méthode qui ajoute un film avec un string comportant les attributs du film.
-//! \param ligne                Le string comportant les attributs du film.
-//! \param gestionnaireAuteurs  Le gestionnaire des auteurs. Nécessaire pour
-//! associer un film à un
-//!                             auteur.
-//! \return                     Un bool représentant si l'opération est un
-//! succès.
+/****************************************************************************
+ * Fonction: Librairie:: lireLigneFilm
+ * Description:  Methode qui ajoute un film avec un string comportant les attributs du film
+ * Paramètres: - const std::string& ligne : le string comportant les attributs du film
+ *             - GestionnaireAuteurs& gestionnaireAuteurs : le gestionnare des auteurs
+ * Retour: (bool) un bool representant le succes ou non de la fonction 
+ ****************************************************************************/
 bool Librairie::lireLigneFilm(const std::string& ligne, GestionnaireAuteurs& gestionnaireAuteurs)
 {
     std::istringstream stream(ligne);
@@ -260,33 +288,32 @@ bool Librairie::lireLigneFilm(const std::string& ligne, GestionnaireAuteurs& ges
     bool estRestreintParAge;
     std::string nomAuteur;
 
-    // TODO
-    // Pour extraire tout ce qui se trouve entre "" dans un stream,
-    // il faut faire stream >> std::quoted(variable)
-    // Utiliser l'opérateur d'extraction (>>) pour retrouver les attributs du
-    // films Si l'auteur n'existe pas, retourner false Utiliser la fonction
-    // ajouter film
     stream >> std::quoted(nomFilm) >> anneeSortie >> genreValeurEnum  >> paysValeurEnum>>
-    estRestreintParAge >> std::quoted(nomAuteur); 
+    estRestreintParAge >> std::quoted(nomAuteur); // intisialise  tout les attributs
+    //  de la clas film par la valeur lu dans le fichier 
       
-    if(gestionnaireAuteurs.chercherAuteur(nomAuteur) == nullptr)  return false; 
+    if(gestionnaireAuteurs.chercherAuteur(nomAuteur) == nullptr)  return false;  // si l'auteur n'exise pas la fonction a echouer
+
     
     else{
          
         Film* NouveauFilm = new Film(nomFilm, anneeSortie, 
         to_enum<Film::Genre>(genreValeurEnum), to_enum<Pays>(paysValeurEnum), 
         estRestreintParAge, gestionnaireAuteurs.chercherAuteur(nomAuteur)); 
-        ajouterFilm(NouveauFilm); 
+        // on initialise un nouveau film avec les valeur lu dans le fichier et on l'ajoute a a liste des films 
+        ajouterFilm(NouveauFilm);
         return true; 
         
     }
 
 }
 
-// TODO: trouverIndexFilm(const std::string& nomFilm) const
-// Retourner l'indexe du film comportant le nom envoyé en paramètre
-// Si le film n'existe pas, retourner -1 (FILM_INEXSISTANT)
-
+/****************************************************************************
+ * Fonction: Librairie:: trouverIndexFilm const
+ * Description:  Retourner l'indexe du film comportant le nom envoye en parametre
+ * Paramètres: const std::string& nomFilm
+ * Retour: (int) l'indexe du film trouve (-1 pour FILM_INEXISTANT)
+ ****************************************************************************/
 int Librairie::trouverIndexFilm(const std::string& nomFilm) const 
 {
     for(unsigned int  i = 0; i < nbFilms_; i++)
