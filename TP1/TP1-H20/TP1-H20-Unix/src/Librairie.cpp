@@ -43,7 +43,11 @@ Librairie::Librairie():
 Librairie::~Librairie()
 {
    supprimerFilms();
-   delete[] films_; // on suprime de tableau 
+   for (int i=0; i<nbFilms_; i++)
+   {
+    delete [] films_[i];
+    delete [] films_;}
+    // delete[] films_; // on suprime de tableau 
    films_ = nullptr;  // on desalou la memoire du tableau 
 }
 
@@ -151,7 +155,7 @@ bool Librairie::chargerFilmsDepuisFichier(const std::string& nomFichier,
     std::ifstream fichier(nomFichier);
     if (fichier)
     {
-        // TODO
+        
         std::string ligne;
         for (unsigned int i = 0; i < nbFilms_; i++)
 		{
@@ -159,10 +163,10 @@ bool Librairie::chargerFilmsDepuisFichier(const std::string& nomFichier,
 		}
 		supprimerFilms(); 
         while(getline(fichier,ligne)){
-            if(!lireLigneFilm(ligne,gestionnaireAuteurs))
-            {
+            lireLigneFilm(ligne,gestionnaireAuteurs);
+            
             return false;
-            }
+            
         }
         return true; 
     }

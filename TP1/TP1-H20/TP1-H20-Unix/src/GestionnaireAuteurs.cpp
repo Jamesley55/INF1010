@@ -32,7 +32,7 @@
  ****************************************************************************/
 bool GestionnaireAuteurs::ajouterAuteur(const Auteur& auteur)
 {
-     if(nbAuteurs_ >= NB_AUTEURS_MAX)
+     if(nbAuteurs_ == NB_AUTEURS_MAX)
      {
          return false; 
      }
