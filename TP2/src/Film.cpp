@@ -59,7 +59,7 @@ Film::Film(const std::string& nom, unsigned int anneeDeSortie, Genre genre, Pays
     , pays_(pays)
     , estRestreintParAge_(estRestreintParAge)
     , auteur_(auteur)
-    , paysRestreints_(std::make_unique<Pays[]>(CAPACITE_PAYS_INITIALE))
+    , paysRestreints_()
     , nbPaysRestreints_(0)
     , capacitePaysRestreints_(CAPACITE_PAYS_INITIALE)
 {
@@ -74,26 +74,8 @@ Film::~Film()
 //! \param pays Pays à ajouter à la liste
 void Film::ajouterPaysRestreint(Pays pays)
 {
-    static constexpr unsigned int AUGMENTATION_CAPACITE_PAYS = 2;
+    paysRestreints_.push_back(pays);
 
-    // Verifier si assez de mémoire est allouée
-    if (nbPaysRestreints_ >= capacitePaysRestreints_)
-    {
-        // Creer nouveau tableau
-        
-        std::vector<Pays[]>  newArray;
-
-        // Copier chaque élément vers le nouveau tableau
-        for (std::size_t i = 0; i < nbPaysRestreints_; i++)
-        {
-            //newArray.push_back(paysRestreints_[i]); 
-        }
-
-        paysRestreints_ = std::move(newArray); // Pointer vers la nouvelle adresse mémoire
-        capacitePaysRestreints_ *= AUGMENTATION_CAPACITE_PAYS; // Mettre à jour la capacité
-    }
-
-    paysRestreints_[nbPaysRestreints_++] = pays;
 }
 
 std::ostream& operator<<(std::ostream &o, const Film &film)
@@ -116,7 +98,11 @@ std::ostream& operator<<(std::ostream &o, const Film &film)
 //! Méthode qui supprime les pays restreints
 void Film::supprimerPaysRestreints()
 {
-    nbPaysRestreints_ = 0;
+    for(std::size_t  i = paysRestreints_.size(); i == 0; i++)
+    {
+    paysRestreints_.pop_back(); 
+    }
+
 }
 
 //! Méthode qui retourne si un pays est dans la liste des pays restreints du film
@@ -124,7 +110,8 @@ void Film::supprimerPaysRestreints()
 //! \return     Un bool représentant si le pays se trouve dans la liste des pays restreints
 bool Film::estRestreintDansPays(Pays pays) const
 {
-    for (std::size_t i = 0; i < nbPaysRestreints_; i++)
+
+    for (std::size_t i = 0; i < paysRestreints_.size(); i++)
     {
         if (paysRestreints_[i] == pays)
         {

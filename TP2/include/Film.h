@@ -6,6 +6,7 @@
 #include "Auteur.h"
 #include "Pays.h"
 
+
 class Film
 {
 public:
@@ -44,7 +45,7 @@ private:
     bool estRestreintParAge_;
     Auteur* auteur_;
 
-    std::unique_ptr<Pays[]> paysRestreints_;
+    std::vector<Pays> paysRestreints_; 
     std::size_t nbPaysRestreints_;
     std::size_t capacitePaysRestreints_;
 };

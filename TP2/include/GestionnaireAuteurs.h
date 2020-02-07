@@ -8,12 +8,12 @@ class GestionnaireAuteurs
 {
 public:
     GestionnaireAuteurs();
-
-    bool ajouterAuteur(const Auteur& auteur);
     Auteur* chercherAuteur(const std::string& nomAuteur);
     bool chargerDepuisFichier(const std::string& nomFichier);
-    void afficher(std::ostream& stream) const;
-
+    friend std::ostream& operator<<(std::ostream & o, const GestionnaireAuteurs &gesAuteur);
+    bool operator+=(const Auteur &auteur); 
+ 
+    
     std::size_t getNbAuteurs() const;
 
     static constexpr std::size_t NB_AUTEURS_MAX = 16;

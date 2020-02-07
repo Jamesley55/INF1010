@@ -14,17 +14,17 @@ GestionnaireAuteurs::GestionnaireAuteurs()
 //! Méthode qui ajoute un auteur à la liste des auteurs
 //! \param auteur L'auteur à ajouter
 //! \return       Un bool représentant si l'opération a fonctionnné
-bool GestionnaireAuteurs::ajouterAuteur(const Auteur& auteur)
-{
-    if (nbAuteurs_ >= NB_AUTEURS_MAX)
+
+ bool GestionnaireAuteurs::operator+=(const Auteur &auteur)
+ {
+     if (nbAuteurs_ >= NB_AUTEURS_MAX)
     {
         return false;
     }
 
-    auteurs_[nbAuteurs_++] = auteur;
-    return true;
-}
-
+    auteurs_.push_back(auteur); 
+    return true; 
+ }
 //! Méhode qui cherche un auteur par son nom complet
 //! \param nomAuteur Le nom de l'auteur à trouver
 //! \return          Un pointeur vers l'auteur. Le pointeur est nullptr si l'auteur n'existe pas.
@@ -67,13 +67,15 @@ bool GestionnaireAuteurs::chargerDepuisFichier(const std::string& nomFichier)
 
 //! Méthode qui affiche la liste des auteurs
 //! \param stream Le stream dans lequel afficher
-void GestionnaireAuteurs::afficher(std::ostream& stream) const
+std::ostream& operator<<(std::ostream & o, const GestionnaireAuteurs &gesAuteur)
 {
-    for (std::size_t i = 0; i < nbAuteurs_; i++)
+   for (std::size_t i = 0; i < gesAuteur.nbAuteurs_; i++)
     {
-        auteurs_[i].afficher(stream);
-        stream << '\n';
+         o << gesAuteur.auteurs_[i] << '\n';
     }
+
+    return o; 
+
 }
 
 //! Méthode qui retourne le nombre d'auteurs
