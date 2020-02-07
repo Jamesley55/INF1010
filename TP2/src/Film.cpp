@@ -3,6 +3,7 @@
 #include "Pays.h"
 #include "typesafe_enum.h"
 
+
 namespace
 {
     constexpr std::size_t CAPACITE_PAYS_INITIALE = 2;
@@ -79,13 +80,13 @@ void Film::ajouterPaysRestreint(Pays pays)
     if (nbPaysRestreints_ >= capacitePaysRestreints_)
     {
         // Creer nouveau tableau
-        std::unique_ptr<Pays[]> newArray =
-            std::make_unique<Pays[]>(capacitePaysRestreints_ * AUGMENTATION_CAPACITE_PAYS);
+        
+        std::vector<Pays[]>  newArray;
 
         // Copier chaque élément vers le nouveau tableau
         for (std::size_t i = 0; i < nbPaysRestreints_; i++)
         {
-            newArray[i] = paysRestreints_[i];
+            //newArray.push_back(paysRestreints_[i]); 
         }
 
         paysRestreints_ = std::move(newArray); // Pointer vers la nouvelle adresse mémoire
@@ -93,6 +94,23 @@ void Film::ajouterPaysRestreint(Pays pays)
     }
 
     paysRestreints_[nbPaysRestreints_++] = pays;
+}
+
+std::ostream& operator<<(std::ostream &o, const Film &film)
+{
+  
+    
+     o << film.nom_ << "\n\tDate de sortie: " << film.anneeDeSortie_
+           << "\n\tGenre: " << getGenreString(film.genre_) << "\n\tAuteur: " << film.auteur_->getNom()
+           << "\n\tPays: " << getPaysString(film.pays_)
+           << (film.nbPaysRestreints_ == 0 ? "\n\tAucun pays restreint." : "\n\tPays restreints:");
+
+    for (std::size_t i = 0; i < film.nbPaysRestreints_; i++)
+    {
+        o << "\n\t\t" << getPaysString(film.paysRestreints_[i]);
+    }
+    o << '\n';
+    return o; 
 }
 
 //! Méthode qui supprime les pays restreints
@@ -118,20 +136,6 @@ bool Film::estRestreintDansPays(Pays pays) const
 
 //! Méthode qui affiche le film
 //! \param stream Le stream dans lequel afficher
-void Film::afficher(std::ostream& stream) const
-{
-    // Ne modifiez pas cette fonction
-    stream << nom_ << "\n\tDate de sortie: " << anneeDeSortie_
-           << "\n\tGenre: " << getGenreString(genre_) << "\n\tAuteur: " << auteur_->getNom()
-           << "\n\tPays: " << getPaysString(pays_)
-           << (nbPaysRestreints_ == 0 ? "\n\tAucun pays restreint." : "\n\tPays restreints:");
-
-    for (std::size_t i = 0; i < nbPaysRestreints_; i++)
-    {
-        stream << "\n\t\t" << getPaysString(paysRestreints_[i]);
-    }
-    stream << '\n';
-}
 
 // Méthode qui retourne le genre du film
 // \return Le genre du film

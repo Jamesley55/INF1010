@@ -28,6 +28,7 @@ public:
     void supprimerPaysRestreints();
     bool estRestreintDansPays(Pays pays) const;
     void afficher(std::ostream& stream) const;
+    friend std::ostream& operator<<(std::ostream &o, const Film & film);
 
     Genre getGenre() const;
     bool estRestreintParAge() const;
