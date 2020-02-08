@@ -30,9 +30,9 @@ GestionnaireAuteurs::GestionnaireAuteurs()
 //! \return          Un pointeur vers l'auteur. Le pointeur est nullptr si l'auteur n'existe pas.
 Auteur* GestionnaireAuteurs::chercherAuteur(const std::string& nomAuteur)
 {
-    for (std::size_t i = 0; i < nbAuteurs_; i++)
+    for (std::size_t i = 0; i < auteurs_.size(); i++)
     {
-        if (auteurs_[i].getNom() == nomAuteur)
+        if (auteurs_[i] == nomAuteur)
         {
             return &auteurs_[i];
         }
@@ -49,7 +49,7 @@ bool GestionnaireAuteurs::chargerDepuisFichier(const std::string& nomFichier)
     std::ifstream fichier(nomFichier);
     if (fichier)
     {
-        nbAuteurs_ = 0;
+        auteurs_.clear; 
         std::string ligne;
         while (std::getline(fichier, ligne))
         {
@@ -82,7 +82,7 @@ std::ostream& operator<<(std::ostream & o, const GestionnaireAuteurs &gesAuteur)
 //! \return Le nombre d'auteurs
 std::size_t GestionnaireAuteurs::getNbAuteurs() const
 {
-    return nbAuteurs_;
+    return auteurs_.size();
 }
 
 //! Méthode qui ajoute un auteur avec un string
@@ -96,10 +96,8 @@ bool GestionnaireAuteurs::lireLigneAuteur(const std::string& ligne)
     // Pour extraire tout ce qui se trouve entre "" dans un stream,
     // il faut faire stream >> std::quoted(variable)
 
-    if (stream >> std::quoted(nomAuteur) >> age)
-    {
-        bool succes = ajouterAuteur(Auteur(nomAuteur, age));
-        return succes;
+    if (stream >> std::quoted(nomAuteur) >> age){
+        return *this += Auteur(nomAuteur, age);
     }
     return false;
 }

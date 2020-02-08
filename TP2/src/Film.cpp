@@ -98,11 +98,7 @@ std::ostream& operator<<(std::ostream &o, const Film &film)
 //! Méthode qui supprime les pays restreints
 void Film::supprimerPaysRestreints()
 {
-    for(std::size_t  i = paysRestreints_.size(); i == 0; i++)
-    {
-    paysRestreints_.pop_back(); 
-    }
-
+    paysRestreints_.clear; 
 }
 
 //! Méthode qui retourne si un pays est dans la liste des pays restreints du film
