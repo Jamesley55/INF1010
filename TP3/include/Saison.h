@@ -3,7 +3,8 @@
 
 #include <algorithm>
 #include <vector>
-// To do
+#include <memory>
+#include "Episode.h"
 
 class Saison
 {

@@ -1,73 +1,105 @@
 // To do
+#include"Saison.h"
 
-// To do
-Saison::Saison()
-    // To do
+
+// constructeur par default 
+Saison::Saison():
+numSaison_(0),
+nbEpisodesmax_(0)
 {
 }
 
-// To do
-Saison::Saison(unsigned int numSaison, unsigned int nbEpisodemax)
-    // To do
+// constructeur par parametre
+Saison::Saison(unsigned int numSaison, unsigned int nbEpisodemax):
+numSaison_(numSaison),
+nbEpisodesmax_(nbEpisodemax)
 {
 }
 
-// To do
+// cree une copie de l'objet passer en parametre 
 Saison::Saison(const Saison& saison)
 {
-    // To do
+    numSaison_ =saison.numSaison_;
+    nbEpisodesmax_ = saison.nbEpisodesmax_;
+    episodes_ = saison.episodes_;
 }
 
-// To do
+// vide le vecteur episode
 Saison::~Saison()
 {
-    // To do
+    episodes_.clear();
 }
 
-// To do
+// rajoute un episode dans le vecteur d'episode si il n'existe pas deja
+// si il existe deja on supprime le derniere element et on rajoute le plus recent
 Saison& Saison::operator+=(std::unique_ptr<Episode> episode)
 {
-    // To do
+    sort(episodes_.begin(),episodes_.end(), Episode::SortByNumEpisode());
+    size_t index = episode->getNumEpisode();
+    size_t indexEpisode = trouverIndexEpisode(index);
+    if(indexEpisode != EPISODE_INEXSISTANTE) episodes_.push_back(episode); 
+    else episodes_.erase(episodes_.begin()+ index); episodes_.push_back(episode);
+    
+    return *this;
 }
 
-// To do
+//  retire un episode du vecteur episode 
 Saison& Saison::operator-=(unsigned int numEpisode)
 {
-    // To do
+   size_t index = trouverIndexEpisode(numEpisode);
+   episodes_.erase(episodes_.begin()+index);
 }
 
-// To do
+// return true si le numero passer en parametre est egale 
+// au numSaison de l'objet qu'on veut surcharger 
 bool Saison::operator==(unsigned int numSaison)
 {
-    // To do
+    if(this->numSaison_ == numSaison) return true; 
+    return false;
 }
 
-// To do
+// affiche tout les attribu de la saison  et tout les episode a l'interieur du vector  episodes_
 std::ostream& operator<<(std::ostream& os, const Saison& saison)
 {
-    // To do
-}
+     os << saison.nbEpisodesmax_ << ""<< saison.numSaison_;
+     for(size_t i = 0; i < saison.episodes_.size(); i++)
+     {
+         os << saison.episodes_[i].get();
+     }
+     return os; 
+}   
 
-// To do
+// initialiser out les atributs de la classe saison
 std::istream& operator>>(std::istream& is, Saison& saison)
 {
-    // To do
+   is >> saison.nbEpisodesmax_ >> saison.numSaison_; 
+   for(size_t i =0; i < saison.episodes_.size(); i++)
+   {
+       is >> *saison.episodes_[i].get();
+   }
+    
+    return is;
 }
 
-// To do
+// retourne le nombre de saison
 unsigned int Saison::getNumSaison() const
 {
-    // To do
+    return numSaison_;
 }
 
-// To do
+// retourne de nombre d'episode dans la saison
 size_t Saison::getNbEpisodes() const
 {
-   // To do
+   return nbEpisodesmax_;
 }
 
-// To do
-size_t Saison::trouverIndexEpisode(unsigned int numEpisode)
+ // trouve l'index d'une episode dans une saison
+size_t Saison::trouverIndexEpisode(unsigned int numEpisode) 
 {
-    // To do
+
+    for(size_t  i= 0; i < this->episodes_.size(); i++)
+    {
+        if(numEpisode == this->episodes_[i]->getNumEpisode()) return i ;
+    }
+    return -1 ; 
 }

@@ -1,8 +1,10 @@
 // To do
-
+#include"Auteur.h"
 // To do
-Auteur::Auteur()
-// To do
+Auteur::Auteur():
+nom_(""),
+anneeDeNaissance_(0),
+nbMedias_(0)
 {
 }
 
@@ -66,5 +68,6 @@ std::ostream& operator<<(std::ostream& os, const Auteur& auteur)
 // To do
 std::istream& operator>>(std::istream& is, Auteur& auteur)
 {
-    // To do
+    is >> auteur.nom_ >> auteur.anneeDeNaissance_  >>auteur.nbMedias_;
+    return is; 
 }

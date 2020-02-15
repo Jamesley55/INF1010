@@ -2,6 +2,9 @@
 #define GESTIONNAIRESAISONS_H
 
 // To do
+#include"Saison.h"
+#include <memory>
+
 
 class GestionnaireSaisons
 {

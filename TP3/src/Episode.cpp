@@ -1,37 +1,49 @@
 // To do
-
+#include"Episode.h"
 // To do
+
+// constructeur par default 
 Episode::Episode()
 // To do
 {
+    nom_ = "";
+    duree_ = "";
+    numEpisode_ = 0; 
 }
 
-// To do
+// constructeur par parametre
 Episode::Episode(unsigned int numEpisode, const std::string& nom, const std::string& duree)
 // To do
 {
+    numEpisode_ = numEpisode; 
+    nom_ = nom;
+    duree_= duree; 
 }
 
-// To do
+// operateur == return true si les numero passer en parrametre
+// est egale au numEpisode de l'attribut qu'on veut surcharger
 bool Episode::operator==(unsigned int numEpisode)
 {
-    // To do
+    if(this->numEpisode_ == numEpisode)   return true;
+
+    return false; 
 }
 
-// To do
+// affiche tout les attributs de l'episode en cascade 
 std::ostream& operator<<(std::ostream& os, const Episode& episode)
 {
-    // To do
+   return os << episode.duree_ << "" << episode.nom_ << "" << episode.numEpisode_;
+
 }
 
-// To do
+// assigne des valeur au attribut de l'episode 
 std::istream& operator>>(std::istream& is, Episode& episode)
 {
-    // To do
+    return is >> episode.duree_ >> episode.nom_ >> episode.numEpisode_;
 }
 
-// To do
+// return le nombre d'episode 
 unsigned int Episode::getNumEpisode() const
 {
-    // To do
+  return numEpisode_; 
 }
