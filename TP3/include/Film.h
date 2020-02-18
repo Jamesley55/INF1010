@@ -2,6 +2,10 @@
 #define FILM_H
 
 // To do
+#include"Auteur.h"
+#include<ostream>
+#include"memory" 
+#include"Media.h" 
 
 class Film : public Media
 {

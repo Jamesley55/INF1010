@@ -1,9 +1,10 @@
 // To do
-
+#include"Serie.h"
 // To do              Pointeur vers l'auteur du serie
 Serie::Serie(Auteur* auteur)
     // To do
 {
+    
 }
 
 // To do

@@ -3,6 +3,12 @@
 
 #include <functional>
 // To do
+#include"Serie.h"
+#include"Saison.h"
+#include"Episode.h"
+#include"GestionnaireAuteurs.h"
+#include"Film.h"
+#include "Media.h"
 
 class Librairie
 {
