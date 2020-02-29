@@ -1,22 +1,24 @@
 // To do
 #include"Serie.h"
-// To do              Pointeur vers l'auteur du serie
-Serie::Serie(Auteur* auteur)
-    // To do
-{
-    
+
+// constructeur par defaut de la classe Serie
+Serie::Serie(Auteur* auteur):
+Media(auteur, Media::TypeMedia::Serie),
+GestionnaireSaisons()
+{    
 }
 
-// To do
+// constructeur par parametre de la classe Serie
 Serie::Serie(const std::string& nom, unsigned int anneeDeSortie, Genre genre, Pays pays,
-             bool estRestreintParAge, Auteur* auteur)
-    // To do
+             bool estRestreintParAge, Auteur* auteur):
+Media(nom,anneeDeSortie,genre, pays, estRestreintParAge, auteur, Media::TypeMedia::Serie),
+GestionnaireSaisons()
 {
 }
 
-// To do
-Serie::Serie(const Serie& serie)
-    // To do
+// constructeur par copie de la classe Serie
+Serie::Serie(const Serie& serie):
+Media(serie.nom_, serie.anneeDeSortie_, serie.genre_,serie.pays_, serie.estRestreintParAge_,serie.auteur_, serie.typeMedia_)
 {
     // To do
 }
@@ -24,11 +26,16 @@ Serie::Serie(const Serie& serie)
 // To do
 std::ostream& Serie::afficher(std::ostream& os) const
 {
-    // To do
+    Media::afficher(os);
+    for(unsigned int i = 0; i < saisons_.size(); i++){
+
+      os << *saisons_[i]; 
+    }
+    return os; 
 }
 
 // To do
 std::unique_ptr<Media> Serie::clone() const
 {
-    // To do
+    return std::make_unique<Media>(*this); 
 }
