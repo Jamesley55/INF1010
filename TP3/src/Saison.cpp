@@ -17,12 +17,16 @@ nbEpisodesmax_(nbEpisodemax)
 }
 
 // cree une copie de l'objet passer en parametre 
-Saison::Saison(const Saison& saison)
+Saison::Saison(const Saison& saison):
+numSaison_(saison.numSaison_),
+nbEpisodesmax_(saison.nbEpisodesmax_)
 {
-    numSaison_ =saison.numSaison_;
-    nbEpisodesmax_ = saison.nbEpisodesmax_;
-    episodes_ = saison.episodes_;
+    for(int i = 0; i < saison.episodes_.size(); i++)
+    {
+     episodes_.push_back(std::make_unique<Episode>(saison.episodes_)); 
+    }
 }
+
 
 // vide le vecteur episode
 Saison::~Saison()

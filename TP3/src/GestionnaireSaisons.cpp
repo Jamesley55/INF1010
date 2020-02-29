@@ -13,9 +13,13 @@ GestionnaireSaisons& GestionnaireSaisons::operator+=(std::unique_ptr<Saison> sai
 {
     sort(saisons_.begin(), saisons_.end(), Saison::SortByNumSaison());
     size_t index = saison->getNumSaison();
-    if(trouverIndexSaison(index)== SAISON_INEXSISTANTE) saisons_.push_back(std::move(saison));
-    else saisons_.erase(saisons_.begin +index); saisons_.push_back(std::move(saison));
-
+    if(trouverIndexSaison(index)== SAISON_INEXSISTANTE){
+         saisons_.push_back(std::move(saison));
+    }
+    else {
+     saisons_.erase(saisons_.begin +index);
+     saisons_.push_back(std::move(saison));
+    }
     return *this; 
 }
 
@@ -32,18 +36,25 @@ void GestionnaireSaisons::ajouterEpisode(const unsigned int numSaison,
                                          std::unique_ptr<Episode> episode)
 {
     size_t index = trouverIndexSaison(numSaison);
-    saisons_;  
-   // std::unique_ptr<Saison> sainsonEP = dynamic_cast<Episode>(std::move(episode));  
+    if(index = SAISON_INEXSISTANTE){
+
+        *saisons_[index] += std::move(episode); 
+    }
+
 }
 
-// To do
+// retirer une Episode dans le vecteur d'episode
 void GestionnaireSaisons::retirerEpisode(const unsigned int numSaison,
                                          const unsigned int numEpisode)
 {
-    
+    size_t index = trouverIndexSaison(numSaison); 
+
+    if(index != SAISON_INEXSISTANTE){
+        *saisons_[index] -= numEpisode; 
+    }
 }
 
-/// To do
+/// trouve l'index d'une saison 
 size_t GestionnaireSaisons::trouverIndexSaison(const unsigned int numSaison) const
 {
     for(size_t i =0; i < saisons_.size();i++)
@@ -57,15 +68,17 @@ size_t GestionnaireSaisons::trouverIndexSaison(const unsigned int numSaison) con
 
 }
 
-// To do
+// return la saison passer en parametre 
 Saison* GestionnaireSaisons::getSaison(const unsigned int numSaison) const
 {
    return  saisons_[numSaison].get();
     
 }
 
-// To do
+// return le nombre de saison 
 size_t GestionnaireSaisons::getNbSaisons() const
 {
     return saisons_.size(); 
 }
+
+

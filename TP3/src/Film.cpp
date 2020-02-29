@@ -2,7 +2,6 @@
 #include "Film.h"
 // To do
 Film::Film(Auteur* auteur)
-// To do
 {
 }
 

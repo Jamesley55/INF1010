@@ -67,7 +67,7 @@ Media::Media(const Media& serie)
 // To do
 Media::~Media()
 {
-    // To do
+    
 }
 
 //! Méthode qui ajoute un pays à liste des pays restreints du film
@@ -140,13 +140,13 @@ Auteur* Media::getAuteur()
 // To do
 std::istream& Media::lire(std::istream& is)
 {
-    // To do
+   
 }
 
 // To do
 std::istream& operator>>(std::istream& is, Media& media)
 {
-    // To do
+   
 }
 
 // To do
