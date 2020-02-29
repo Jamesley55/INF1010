@@ -40,7 +40,14 @@ namespace
 
 // To do
 Media::Media(Auteur* auteur, Media::TypeMedia typeMedia):
-auteur_(auteur), typeMedia_(typeMedia)
+nom_("unknow"),
+anneeDeSortie_(0),
+genre_(),
+pays_(),
+estRestreintParAge_(false),
+paysRestreints_(),
+auteur_(auteur), 
+typeMedia_(typeMedia)
 {
 }
 
@@ -53,21 +60,32 @@ genre_(genre),
  pays_(pays),
 estRestreintParAge_(estRestreintParAge)
 , auteur_(auteur),
-typeMedia_(typeMedia)
+typeMedia_(typeMedia),
+paysRestreints_()
 {
 }
 
 // To do
-Media::Media(const Media& serie)
+Media::Media(const Media& serie):
+nom_(serie.nom_),
+anneeDeSortie_(serie.anneeDeSortie_),
+genre_(serie.genre_),
+estRestreintParAge_(serie.estRestreintParAge_),
+pays_(serie.pays_),
+typeMedia_(serie.typeMedia_),
+auteur_(serie.auteur_)
 {
-    // To do
+    for( unsigned int i  = 0; i < serie.paysRestreints_.size(); i++){
+      paysRestreints_.push_back(serie.paysRestreints_[i]); 
+
+    }
 }
 
 
 // To do
 Media::~Media()
 {
-    
+    paysRestreints_.clear(); 
 }
 
 //! Méthode qui ajoute un pays à liste des pays restreints du film
@@ -105,13 +123,27 @@ bool Media::estRestreintParAge() const
 // To do
 std::ostream& Media::afficher(std::ostream& os) const
 {
-    // To do
+    os << 
+    nom_<<
+    anneeDeSortie_ << 
+    getGenreString(genre_) <<
+    estRestreintParAge_ <<
+    getPaysString(pays_) <<
+    *auteur_ ; 
+    if (paysRestreints_.size()==0){
+      os << " il n'y a pas de pays restrients"; 
+    }
+    for(unsigned int i =0; i < paysRestreints_.size(); i++){
+        os << getPaysString(paysRestreints_[i]); 
+    }
+    return os; 
+
 }
 
-// To do
+// To do 
 std::ostream& operator<<(std::ostream& os, const Media& media)
 {
-    // To do
+     return media.afficher(os);
 }
 
 // To do
@@ -140,17 +172,37 @@ Auteur* Media::getAuteur()
 // To do
 std::istream& Media::lire(std::istream& is)
 {
-   
+    int genre , pays; 
+
+   is >> 
+   std::quoted(nom_) >> 
+   anneeDeSortie_ >>
+   genre >>
+   estRestreintParAge_ >>
+   pays; 
+
+   genre_ = to_enum<Media::Genre>(genre);
+   pays_ = to_enum<Pays>(pays); 
+
+    return is ; 
+
+
+
+
+
+
+
 }
 
 // To do
 std::istream& operator>>(std::istream& is, Media& media)
 {
    
+   return media.lire(is); 
 }
 
 // To do
 std::unique_ptr<Media> Media::clone() const
 {
-    // To do
+     return std::make_unique<Media>(*this); 
 }
