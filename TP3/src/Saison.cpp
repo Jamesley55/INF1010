@@ -21,9 +21,11 @@ Saison::Saison(const Saison& saison):
 numSaison_(saison.numSaison_),
 nbEpisodesmax_(saison.nbEpisodesmax_)
 {
-    for(int i = 0; i < saison.episodes_.size(); i++)
+     episodes_.clear();
+    for (unsigned int i = 0; i < saison.episodes_.size(); i++)
     {
-     episodes_.push_back(std::make_unique<Episode>(saison.episodes_)); 
+        auto ptrEpisode = std::make_unique<Episode>(*(saison.episodes_[i]));
+        episodes_.push_back(std::move(ptrEpisode));
     }
 }
 
@@ -39,11 +41,15 @@ Saison::~Saison()
 Saison& Saison::operator+=(std::unique_ptr<Episode> episode)
 {
     sort(episodes_.begin(),episodes_.end(), Episode::SortByNumEpisode());
-    size_t index = episode->getNumEpisode();
+    unsigned int  index = episode->getNumEpisode();
     size_t indexEpisode = trouverIndexEpisode(index);
-    if(indexEpisode != EPISODE_INEXSISTANTE) episodes_.push_back(episode); 
-    else episodes_.erase(episodes_.begin()+ index); episodes_.push_back(episode);
-    
+    if(indexEpisode != EPISODE_INEXSISTANTE){ 
+        episodes_.push_back(std::move(episode)); 
+    }
+    else {
+        episodes_.erase(episodes_.begin()+ index); 
+        episodes_.push_back(std::move(episode));
+    }
     return *this;
 }
 
@@ -52,15 +58,26 @@ Saison& Saison::operator-=(unsigned int numEpisode)
 {
    size_t index = trouverIndexEpisode(numEpisode);
    episodes_.erase(episodes_.begin()+index);
+   return *this;
 }
 
 // return true si le numero passer en parametre est egale 
 // au numSaison de l'objet qu'on veut surcharger 
 bool Saison::operator==(unsigned int numSaison)
 {
-    if(this->numSaison_ == numSaison) return true; 
+    if(numSaison_ == numSaison) return true; 
     return false;
 }
+
+bool operator==(unsigned int numSaison, const Saison& saison)
+{
+    if (saison.numSaison_ == numSaison)
+    {
+        return true;
+    }
+    return false;
+}
+
 
 // affiche tout les attribu de la saison  et tout les episode a l'interieur du vector  episodes_
 std::ostream& operator<<(std::ostream& os, const Saison& saison)

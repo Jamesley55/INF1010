@@ -11,7 +11,7 @@ Librairie::Librairie(const Librairie& librairie)
 Librairie& Librairie::operator=(const Librairie& librairie)
 {
     if (&librairie != this) {
-		for (int i = 0; i < librairie.medias_.size(); i++) {
+		for (std::size_t i = 0; i < librairie.medias_.size(); i++) {
 			medias_.push_back(move(librairie.medias_[i]->clone()));
 		}
 	}
@@ -139,7 +139,12 @@ size_t Librairie::getNbMedias() const
 // To do
 std::ostream& operator<<(std::ostream& os, const Librairie& librairie)
 {
-    // To do
+    for(std::size_t i =0 ; i < librairie.medias_.size(); i++){
+     
+     os << *(librairie.medias_[i]) ; 
+
+    }
+    return os; 
 }
 
 // To do
@@ -156,8 +161,13 @@ size_t Librairie::trouverIndexMedia(const std::string& nomMedia) const
 
 // To do
 Librairie& Librairie::operator+=(std::unique_ptr<Media> media)
-{
-    // To do
+{ 
+    if(media == nullptr){
+        return *this; 
+    }
+
+    medias_.push_back(std::move(media));
+    return *this;  
 }
 
 // To do
@@ -168,6 +178,7 @@ Librairie& Librairie::operator-=(const std::string& nomMedia)
     if(index != MEDIA_INEXSISTANT){
         medias_.erase(medias_.begin() +index); 
     }
+    return *this;
 }
 
 // To do
@@ -188,7 +199,29 @@ Media* Librairie::chercherMedia(const std::string& nomMedia, Media::TypeMedia ty
 // To do
 bool Librairie::lireLigneRestrictions(const std::string& ligne)
 {
-    // To do
+    std::istringstream stream(ligne);
+    std::string nomMedia;
+
+    int mediaValeurEnum;
+    stream >> mediaValeurEnum;
+    if (stream >> std::quoted(nomMedia))
+    {
+        Media* media = chercherMedia(nomMedia, to_enum<Media::TypeMedia>(mediaValeurEnum));
+
+        if (media == nullptr)
+        {
+            // Media n'existe pas
+            return false;
+        }
+
+        int paysValeurEnum;
+        while (stream >> paysValeurEnum)
+        {
+            media->ajouterPaysRestreint(to_enum<Pays>(paysValeurEnum));
+        }
+        return true;
+    }
+    return false;
 }
 
 // To do
@@ -210,7 +243,7 @@ bool Librairie::lireLigneMedia(const std::string& ligne, GestionnaireAuteurs& ge
 // To do
 const std::vector<std::unique_ptr<Media>>& Librairie::getMedias() const
 {
-    // To do
+    return medias_; 
 }
 
 // To do
@@ -281,23 +314,57 @@ bool Librairie::lireLigneFilm(std::istream& is, GestionnaireAuteurs& gestionnair
 // To do
 size_t Librairie::getNbFilms() const
 {
-    
+    size_t nbFilm  = 0;
+
+ for(size_t i =0; i < medias_.size(); i++)
+ {
+     
+     if(medias_[i]->getTypeMedia() == Media::TypeMedia::Film)
+     {
+         nbFilm++;
+     }
+ }
+ return nbFilm; 
 }
 
 // To do
 size_t Librairie::getNbSeries() const
 {
-    // To do
+    size_t nbSeries  = 0;
+
+ for(size_t i =0; i < medias_.size(); i++)
+ {
+     
+     if(medias_[i]->getTypeMedia() == Media::TypeMedia::Serie)
+     {
+         nbSeries++;
+     }
+ }
+ return nbSeries; 
 }
 
 // To do
 size_t Librairie::getNbSaisons(const std::string& nomSerie) const
 {
-    // To do
+    size_t index = trouverIndexMedia(nomSerie);
+	if (index!=-MEDIA_INEXSISTANT) {
+		if (auto serie = dynamic_cast<Serie*>(medias_[index].get())) {
+			return serie->getNbSaisons();
+		}
+	}
+	return 0;
 }
 
 // To do
 size_t Librairie::getNbEpisodes(const std::string& nomSerie, const unsigned int numSaison) const
 {
-    // To do
-}
+size_t index = trouverIndexMedia(nomSerie);
+	if (index != MEDIA_INEXSISTANT) {
+		if (auto serie = dynamic_cast<Serie*>(medias_[index].get())) {
+			if(serie->getSaison(numSaison)){
+				return serie->getSaison(numSaison)->getNbEpisodes();
+			}
+		}
+			
+	}
+	return 0;}

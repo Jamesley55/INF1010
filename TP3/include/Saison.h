@@ -29,6 +29,7 @@ public:
     Saison& operator+=(std::unique_ptr<Episode> episode);
     Saison& operator-=(unsigned int numEpisode);
     bool operator==(unsigned int numSaison);
+    friend bool operator==(unsigned int numSaison, const Saison& saison);
     friend std::ostream& operator<<(std::ostream& os, const Saison& Saison);
     friend std::istream& operator>>(std::istream& is, Saison& saison);
 
