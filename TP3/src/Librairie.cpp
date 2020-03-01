@@ -133,7 +133,7 @@ bool Librairie::chargerRestrictionsDepuisFichiers(const std::string& nomFichier)
 // To do
 size_t Librairie::getNbMedias() const
 {
-    // To do
+    return medias_.size(); 
 }
 
 // To do

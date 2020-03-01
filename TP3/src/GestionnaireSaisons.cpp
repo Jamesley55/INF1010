@@ -12,7 +12,7 @@ GestionnaireSaisons::~GestionnaireSaisons()
 GestionnaireSaisons& GestionnaireSaisons::operator+=(std::unique_ptr<Saison> saison)
 {
     sort(saisons_.begin(), saisons_.end(), Saison::SortByNumSaison());
-    size_t index = saison->getNumSaison();
+    unsigned int  index = saison->getNumSaison();
     if(trouverIndexSaison(index)== SAISON_INEXSISTANTE){
          saisons_.push_back(std::move(saison));
     }
