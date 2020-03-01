@@ -17,7 +17,7 @@ GestionnaireSaisons& GestionnaireSaisons::operator+=(std::unique_ptr<Saison> sai
          saisons_.push_back(std::move(saison));
     }
     else {
-     saisons_.erase(saisons_.begin +index);
+     saisons_.erase(saisons_.begin()+index);
      saisons_.push_back(std::move(saison));
     }
     return *this; 
@@ -36,7 +36,7 @@ void GestionnaireSaisons::ajouterEpisode(const unsigned int numSaison,
                                          std::unique_ptr<Episode> episode)
 {
     size_t index = trouverIndexSaison(numSaison);
-    if(index = SAISON_INEXSISTANTE){
+    if(index != SAISON_INEXSISTANTE){
 
         *saisons_[index] += std::move(episode); 
     }

@@ -4,13 +4,19 @@
 // To do
 Librairie::Librairie(const Librairie& librairie)
 {
-    // To do
+    *this = librairie; 
 }
 
 // To do
 Librairie& Librairie::operator=(const Librairie& librairie)
 {
-    // To do
+    if (&librairie != this) {
+		for (int i = 0; i < librairie.medias_.size(); i++) {
+			medias_.push_back(move(librairie.medias_[i]->clone()));
+		}
+	}
+
+	return *this;
 }
 
 //! Destructeur de la classe Librairie
@@ -22,39 +28,60 @@ Librairie::~Librairie()
 // To do
 Film* Librairie::chercherFilm(const std::string& nomFilm)
 {
-    // To do
+     Media *media = chercherMedia(nomFilm, Media::TypeMedia::Film); 
+
+     return dynamic_cast<Film*>(media); 
+    
 }
 
 // To do
 Serie* Librairie::chercherSerie(const std::string& nomSerie)
 {
-    // To do
+    Media *medias = chercherMedia(nomSerie, Media::TypeMedia::Serie);
+    if(!medias){
+        return nullptr; 
+    }
+    return dynamic_cast<Serie*>(medias);
 }
 
 // To do
 void Librairie::ajouterSaison(const std::string& nomSerie, std::unique_ptr<Saison> saison)
 {
-    // To do
+    size_t index = trouverIndexMedia(nomSerie); 
+    if(index != MEDIA_INEXSISTANT && medias_[index]->getTypeMedia() == Media::TypeMedia::Saison){
+          *dynamic_cast<GestionnaireSaisons*>(medias_[index].get())+= move(saison);
+    }
 }
 
 // To do
 void Librairie::retirerSaison(const std::string& nomSerie, unsigned int numSaison)
 {
-    // To do
+    size_t index = trouverIndexMedia(nomSerie); 
+    if(index != MEDIA_INEXSISTANT && medias_[index]->getTypeMedia() == Media::TypeMedia::Saison){
+        *dynamic_cast<GestionnaireSaisons*>(medias_[index].get()) -= numSaison; 
+    }
 }
 
 // To do
 void Librairie::ajouterEpisode(const std::string& nomSerie, unsigned int numSaison,
                                std::unique_ptr<Episode> episode)
 {
-    // To do
+    size_t index = trouverIndexMedia(nomSerie); 
+    if(index != MEDIA_INEXSISTANT && medias_[index]->getTypeMedia() == Media::TypeMedia::Episode){
+     
+       dynamic_cast<GestionnaireSaisons*>(medias_[index].get())->ajouterEpisode(numSaison, move(episode));
+    }
 }
 
 
 void Librairie::retirerEpisode(const std::string& nomSerie, unsigned int numSaison,
                                unsigned int numEpisode)
 {
-    // To do
+     size_t index = trouverIndexMedia(nomSerie); 
+    if(index != MEDIA_INEXSISTANT && medias_[index]->getTypeMedia() == Media::TypeMedia::Episode){
+     
+       dynamic_cast<GestionnaireSaisons*>(medias_[index].get())->retirerEpisode(numSaison,numEpisode);
+    }
 }
 
 //! Méthode qui charge les series à partir d'un fichier.
@@ -66,6 +93,18 @@ bool Librairie::chargerMediasDepuisFichier(const std::string& nomFichier,
                                            GestionnaireAuteurs& gestionnaireAuteurs)
 {
     // To do
+   std::ifstream fichier(nomFichier);
+    if (fichier)
+    {
+        std::string ligne;
+	    while (getline(fichier, ligne)) {
+		lireLigneMedia(ligne, gestionnaireAuteurs);
+	}
+        return true;
+    }
+    std::cerr << "Le fichier " << nomFichier
+              << " n'existe pas. Assurez vous de le mettre au bon endroit.\n";
+    return false;
 }
 
 //! Méthode qui charge les restrictions des series à partir d'un fichier.
@@ -106,7 +145,13 @@ std::ostream& operator<<(std::ostream& os, const Librairie& librairie)
 // To do
 size_t Librairie::trouverIndexMedia(const std::string& nomMedia) const
 {
-    // To do
+    for(unsigned int i = 0; i < medias_.size(); i++){
+            if(nomMedia == medias_[i]->getNom()){
+                return i;
+
+            }
+    }
+    return MEDIA_INEXSISTANT; 
 }
 
 // To do
@@ -118,13 +163,26 @@ Librairie& Librairie::operator+=(std::unique_ptr<Media> media)
 // To do
 Librairie& Librairie::operator-=(const std::string& nomMedia)
 {
-    // To do
+    size_t index = trouverIndexMedia(nomMedia);
+
+    if(index != MEDIA_INEXSISTANT){
+        medias_.erase(medias_.begin() +index); 
+    }
 }
 
 // To do
 Media* Librairie::chercherMedia(const std::string& nomMedia, Media::TypeMedia typeMedia)
 {
-    // To do
+    size_t index = trouverIndexMedia(nomMedia); 
+    
+    if(index != MEDIA_INEXSISTANT){
+
+        Media *media = medias_[index].get(); 
+        if(medias_[index]->getTypeMedia() == typeMedia){
+           return media; 
+        }
+    }
+    return nullptr; 
 }
 
 // To do
@@ -158,31 +216,72 @@ const std::vector<std::unique_ptr<Media>>& Librairie::getMedias() const
 // To do
 bool Librairie::lireLigneEpisode(std::istream& is, GestionnaireAuteurs&)
 {
-    // To do
+    Episode episode;
+	is >>  episode;
+	auto ptrEpisode = std::make_unique<Episode>(episode);
+	std::string nomSerie;
+	int numSaison;
+	is >> quoted(nomSerie) >> numSaison;
+	ajouterEpisode(nomSerie, numSaison, move(ptrEpisode));
+
+	return true;
 }
 
 // To do
 bool Librairie::lireLigneSaison(std::istream& is, GestionnaireAuteurs&)
 {
-    // To do
+    Saison saison;
+	is >>  saison;
+	auto ptrSaison = std::make_unique<Saison>(saison);
+	std::string nomSaison;
+	is >> quoted(nomSaison);
+	ajouterSaison(nomSaison, move(ptrSaison));
+
+	return true;
 }
 
 // To do
 bool Librairie::lireLigneSerie(std::istream& is, GestionnaireAuteurs& gestionnaireAuteurs)
 {
-    // To do
+    std::string nomAuteur;
+	is >> quoted(nomAuteur);
+	Auteur* auteur = gestionnaireAuteurs.chercherAuteur(nomAuteur);
+	if (auteur) {
+	    auto  serie = std::make_unique<Serie>(Serie(auteur));
+		is >> *serie;
+		if (!chercherMedia(serie->getNom(), Media::TypeMedia(1))) {
+			*this += move(serie);
+			auteur->setNbMedias(auteur->getNbMedias() + 1);
+			return true;
+		}
+	}
+	return false;
 }
 
 // To do
 bool Librairie::lireLigneFilm(std::istream& is, GestionnaireAuteurs& gestionnaireAuteurs)
 {
-    // To do
+   std::string nomAuteur;
+   is >> nomAuteur; 
+   Auteur* auteur =  gestionnaireAuteurs.chercherAuteur(nomAuteur);
+   if(auteur){
+
+        auto film = std::make_unique<Film>(Film(auteur));
+		is >> *film;
+		if (!chercherMedia(film->getNom(), Media::TypeMedia(0))) {
+			*this += move(film);
+			auteur->setNbMedias(auteur->getNbMedias() + 1);
+			return true;
+            }
+   }
+   return false; 
+
 }
 
 // To do
 size_t Librairie::getNbFilms() const
 {
-    // To do
+    
 }
 
 // To do
