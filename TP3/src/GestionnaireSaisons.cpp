@@ -11,24 +11,29 @@ GestionnaireSaisons::~GestionnaireSaisons()
 //  si la saison existe deja on la rempace par la saison passer en parametre
 GestionnaireSaisons& GestionnaireSaisons::operator+=(std::unique_ptr<Saison> saison)
 {
+   size_t indexSaison = trouverIndexSaison(saison->getNumSaison());
+    if (indexSaison!= SAISON_INEXSISTANTE)
+    {
+        saisons_[indexSaison] = std::move(saisons_[saisons_.size() - 1]);
+        saisons_.pop_back();
+    }
+    saisons_.push_back(std::move(saison));
     sort(saisons_.begin(), saisons_.end(), Saison::SortByNumSaison());
-    unsigned int  index = saison->getNumSaison();
-    if(trouverIndexSaison(index)== SAISON_INEXSISTANTE){
-         saisons_.push_back(std::move(saison));
-    }
-    else {
-     saisons_.erase(saisons_.begin()+index);
-     saisons_.push_back(std::move(saison));
-    }
-    return *this; 
+    return *this;
+
 }
 
 // retire la saison passer en parametre dans le vecteur de Saison
 GestionnaireSaisons& GestionnaireSaisons::operator-=(const unsigned int numSaison)
 {
-    size_t  index = trouverIndexSaison(numSaison);
-    saisons_.erase(saisons_.begin()+index);
+   size_t  indexSaison = trouverIndexSaison(numSaison);
+    if (indexSaison != SAISON_INEXSISTANTE)
+    {
+        saisons_[indexSaison] = std::move(saisons_[saisons_.size() - 1]);
+        saisons_.pop_back();
+    }
     return *this;
+
 }
 
 // ajoute un episode a la saison dont le numero est passer en parametre
@@ -57,22 +62,26 @@ void GestionnaireSaisons::retirerEpisode(const unsigned int numSaison,
 /// trouve l'index d'une saison 
 size_t GestionnaireSaisons::trouverIndexSaison(const unsigned int numSaison) const
 {
-    for(size_t i =0; i < saisons_.size();i++)
+    for(size_t i = 0; i < saisons_.size();i++)
     {
-        if(numSaison == this->saisons_[i]->getNumSaison())
+        if(numSaison == saisons_[i]->getNumSaison())
         {
             return i ;
         }
     }
-    return -1; 
+    return SAISON_INEXSISTANTE; 
 
 }
 
 // return la saison passer en parametre 
 Saison* GestionnaireSaisons::getSaison(const unsigned int numSaison) const
 {
-   return  saisons_[numSaison].get();
-    
+     unsigned int  index = trouverIndexSaison(numSaison); 
+     if (index != SAISON_INEXSISTANTE){
+       return  saisons_[index].get();
+
+     }
+    return nullptr; 
 }
 
 // return le nombre de saison 

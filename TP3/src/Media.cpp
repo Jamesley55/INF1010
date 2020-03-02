@@ -172,17 +172,19 @@ Auteur* Media::getAuteur()
 // To do
 std::istream& Media::lire(std::istream& is)
 {
-    int genre , pays; 
+    int genre;
+    int pays; 
 
-   is >> 
+   if (is >> 
    std::quoted(nom_) >> 
    anneeDeSortie_ >>
-   genre >>
-   estRestreintParAge_ >>
-   pays; 
+   genre >> 
+   pays  >>
+   estRestreintParAge_){
 
    genre_ = to_enum<Media::Genre>(genre);
    pays_ = to_enum<Pays>(pays); 
+   }
 
     return is ; 
 

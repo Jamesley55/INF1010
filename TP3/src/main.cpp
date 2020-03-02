@@ -6,6 +6,7 @@
 #include "Utilisateur.h"
 #include "debogageMemoire.h"
 
+
 // NOTE: Pour que le programme compile initialement, vous pouvez changer tous
 // les #if false à des #if false, et mettre en commentaire tout le code qui a été
 // écrit pour vous. Ainsi, vous pourrez graduellement les #if false et tester des

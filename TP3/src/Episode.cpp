@@ -42,14 +42,16 @@ bool operator==(unsigned int numEpisode, const Episode& episode)
 // affiche tout les attributs de l'episode en cascade 
 std::ostream& operator<<(std::ostream& os, const Episode& episode)
 {
-   return os << episode.duree_ << "" << episode.nom_ << "" << episode.numEpisode_;
+   os << episode.duree_ << "" << episode.nom_ << "" << episode.numEpisode_;
+   return os; 
 
 }
 
 // assigne des valeur au attribut de l'episode 
 std::istream& operator>>(std::istream& is, Episode& episode)
 {
-    return is >> episode.duree_ >> episode.nom_ >> episode.numEpisode_;
+     is >> quoted(episode.duree_) >> quoted(episode.nom_) >> episode.numEpisode_;
+     return is ; 
 }
 
 // return le nombre d'episode 

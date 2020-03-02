@@ -40,25 +40,29 @@ Saison::~Saison()
 // si il existe deja on supprime le derniere element et on rajoute le plus recent
 Saison& Saison::operator+=(std::unique_ptr<Episode> episode)
 {
-    sort(episodes_.begin(),episodes_.end(), Episode::SortByNumEpisode());
-    unsigned int  index = episode->getNumEpisode();
-    size_t indexEpisode = trouverIndexEpisode(index);
-    if(indexEpisode != EPISODE_INEXSISTANTE){ 
-        episodes_.push_back(std::move(episode)); 
+    size_t indexEpisode = trouverIndexEpisode(episode->getNumEpisode());
+    if (indexEpisode != EPISODE_INEXSISTANTE)
+    {
+        episodes_[indexEpisode] = std::move(episodes_[episodes_.size() - 1]);
+        episodes_.pop_back();
     }
-    else {
-        episodes_.erase(episodes_.begin()+ index); 
-        episodes_.push_back(std::move(episode));
-    }
+    episodes_.push_back(std::move(episode));
+    sort(episodes_.begin(), episodes_.end(), Episode::SortByNumEpisode());
     return *this;
+
 }
 
 //  retire un episode du vecteur episode 
 Saison& Saison::operator-=(unsigned int numEpisode)
 {
-   size_t index = trouverIndexEpisode(numEpisode);
-   episodes_.erase(episodes_.begin()+index);
-   return *this;
+    size_t  indexEpisode = trouverIndexEpisode(numEpisode);
+    if (indexEpisode != EPISODE_INEXSISTANTE)
+    {
+        episodes_[indexEpisode] = std::move(episodes_[episodes_.size() - 1]);
+        episodes_.pop_back();
+    }
+    return *this;
+
 }
 
 // return true si le numero passer en parametre est egale 

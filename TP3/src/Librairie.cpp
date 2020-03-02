@@ -347,24 +347,20 @@ size_t Librairie::getNbSeries() const
 size_t Librairie::getNbSaisons(const std::string& nomSerie) const
 {
     size_t index = trouverIndexMedia(nomSerie);
-	if (index!=-MEDIA_INEXSISTANT) {
-		if (auto serie = dynamic_cast<Serie*>(medias_[index].get())) {
-			return serie->getNbSaisons();
-		}
-	}
-	return 0;
+	if (index != MEDIA_INEXSISTANT && medias_[index]->getTypeMedia() == Media::TypeMedia::Serie){
+		return dynamic_cast<Serie*>(medias_[index].get())->getNbSaisons();
+    }
+	
+		return 0;
 }
 
 // To do
 size_t Librairie::getNbEpisodes(const std::string& nomSerie, const unsigned int numSaison) const
 {
 size_t index = trouverIndexMedia(nomSerie);
-	if (index != MEDIA_INEXSISTANT) {
-		if (auto serie = dynamic_cast<Serie*>(medias_[index].get())) {
-			if(serie->getSaison(numSaison)){
-				return serie->getSaison(numSaison)->getNbEpisodes();
-			}
-		}
-			
-	}
-	return 0;}
+	if (index != MEDIA_INEXSISTANT && medias_[index]->getTypeMedia() == Media::TypeMedia::Serie){
+		return dynamic_cast<Serie*>(medias_[index].get())->getSaison(numSaison)->getNbEpisodes();
+    }
+
+		return 0;
+}
