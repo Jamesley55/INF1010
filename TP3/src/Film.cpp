@@ -6,6 +6,7 @@ Film::Film(Auteur* auteur):
 Media(auteur, Media::TypeMedia::Film),
 duree_("unknow")
 {
+    auteur->setNbMedias(auteur->getNbMedias()+1); 
 }
 
 // constructeur par parametre de la classe film 
@@ -19,8 +20,8 @@ duree_(duree)
 // To do
 std::ostream& Film::afficher(std::ostream& os) const
 {
-    os << duree_; 
     Media::afficher(os); 
+    os << "/tDuree:"<< duree_; 
     return os ; 
 
 }

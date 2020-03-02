@@ -6,6 +6,8 @@ Serie::Serie(Auteur* auteur):
 Media(auteur, Media::TypeMedia::Serie),
 GestionnaireSaisons()
 {    
+     auteur->setNbMedias(auteur->getNbMedias() + 1);
+
 }
 
 // constructeur par parametre de la classe Serie
@@ -17,10 +19,17 @@ GestionnaireSaisons()
 }
 
 // constructeur par copie de la classe Serie
-Serie::Serie(const Serie& serie):
-Media(serie.nom_, serie.anneeDeSortie_, serie.genre_,serie.pays_, serie.estRestreintParAge_,serie.auteur_, serie.typeMedia_)
+Serie::Serie(const Serie& serie)
+: Media(serie), 
+GestionnaireSaisons()
 {
-    // To do
+  saisons_.clear();
+    for (unsigned int i = 0; i < serie.saisons_.size(); i++)
+    {
+        auto saison_ptr = std::make_unique<Saison>(*(serie.saisons_[i]));
+        saisons_.push_back(std::move(saison_ptr));
+    }
+
 }
 
 // To do
@@ -29,7 +38,7 @@ std::ostream& Serie::afficher(std::ostream& os) const
     Media::afficher(os);
     for(unsigned int i = 0; i < saisons_.size(); i++){
 
-      os << *saisons_[i]; 
+      os << "\t" <<*saisons_[i]; 
     }
     return os; 
 }

@@ -3,8 +3,11 @@
 
 // To do
 Librairie::Librairie(const Librairie& librairie)
-{
-    *this = librairie; 
+{  
+    medias_.clear();
+    for (unsigned int i = 0; i < librairie.medias_.size(); i++){
+        medias_.push_back(((librairie.medias_[i])->clone()));
+    }
 }
 
 // To do
@@ -12,7 +15,8 @@ Librairie& Librairie::operator=(const Librairie& librairie)
 {
     if (&librairie != this) {
 		for (std::size_t i = 0; i < librairie.medias_.size(); i++) {
-			medias_.push_back(move(librairie.medias_[i]->clone()));
+        auto media_ptr = std::make_unique<Media>(*librairie.medias_[i]);
+        medias_.push_back(std::move(media_ptr));
 		}
 	}
 
@@ -28,28 +32,30 @@ Librairie::~Librairie()
 // To do
 Film* Librairie::chercherFilm(const std::string& nomFilm)
 {
-     Media *media = chercherMedia(nomFilm, Media::TypeMedia::Film); 
-
-     return dynamic_cast<Film*>(media); 
+     Media *film = chercherMedia(nomFilm, Media::TypeMedia::Film); 
+    if (!film){
+        return nullptr; 
+    }
+     return dynamic_cast<Film*>(film); 
     
 }
 
 // To do
 Serie* Librairie::chercherSerie(const std::string& nomSerie)
 {
-    Media *medias = chercherMedia(nomSerie, Media::TypeMedia::Serie);
-    if(!medias){
+    Media *serie = chercherMedia(nomSerie, Media::TypeMedia::Serie);
+    if(!serie){
         return nullptr; 
     }
-    return dynamic_cast<Serie*>(medias);
+    return dynamic_cast<Serie*>(serie);
 }
 
 // To do
 void Librairie::ajouterSaison(const std::string& nomSerie, std::unique_ptr<Saison> saison)
 {
     size_t index = trouverIndexMedia(nomSerie); 
-    if(index != MEDIA_INEXSISTANT && medias_[index]->getTypeMedia() == Media::TypeMedia::Saison){
-          *dynamic_cast<GestionnaireSaisons*>(medias_[index].get())+= move(saison);
+    if(index != MEDIA_INEXSISTANT && medias_[index]->Media::getTypeMedia() == Media::TypeMedia::Serie){
+       dynamic_cast<Serie*>((medias_[index]).get())->GestionnaireSaisons::operator+=(std::move(saison));
     }
 }
 
@@ -57,9 +63,9 @@ void Librairie::ajouterSaison(const std::string& nomSerie, std::unique_ptr<Saiso
 void Librairie::retirerSaison(const std::string& nomSerie, unsigned int numSaison)
 {
     size_t index = trouverIndexMedia(nomSerie); 
-    if(index != MEDIA_INEXSISTANT && medias_[index]->getTypeMedia() == Media::TypeMedia::Saison){
-        *dynamic_cast<GestionnaireSaisons*>(medias_[index].get()) -= numSaison; 
-    }
+    if(index != MEDIA_INEXSISTANT && medias_[index]->Media::getTypeMedia() == Media::TypeMedia::Serie){
+        dynamic_cast<Serie*>((medias_[index]).get())->GestionnaireSaisons::operator-=(numSaison);  
+     }
 }
 
 // To do
@@ -78,9 +84,9 @@ void Librairie::retirerEpisode(const std::string& nomSerie, unsigned int numSais
                                unsigned int numEpisode)
 {
      size_t index = trouverIndexMedia(nomSerie); 
-    if(index != MEDIA_INEXSISTANT && medias_[index]->getTypeMedia() == Media::TypeMedia::Episode){
+    if(index != MEDIA_INEXSISTANT && medias_[index]->Media::getTypeMedia() == Media::TypeMedia::Serie){
      
-       dynamic_cast<GestionnaireSaisons*>(medias_[index].get())->retirerEpisode(numSaison,numEpisode);
+       dynamic_cast<Serie*>((medias_[index]).get())->GestionnaireSaisons::retirerEpisode(numSaison, numEpisode);
     }
 }
 
@@ -96,6 +102,7 @@ bool Librairie::chargerMediasDepuisFichier(const std::string& nomFichier,
    std::ifstream fichier(nomFichier);
     if (fichier)
     {
+        medias_.clear();
         std::string ligne;
 	    while (getline(fichier, ligne)) {
 		lireLigneMedia(ligne, gestionnaireAuteurs);
@@ -151,10 +158,10 @@ std::ostream& operator<<(std::ostream& os, const Librairie& librairie)
 size_t Librairie::trouverIndexMedia(const std::string& nomMedia) const
 {
     for(unsigned int i = 0; i < medias_.size(); i++){
-            if(nomMedia == medias_[i]->getNom()){
-                return i;
+        if(nomMedia == medias_[i]->getNom()){
+            return i;
 
-            }
+        }
     }
     return MEDIA_INEXSISTANT; 
 }
@@ -162,22 +169,25 @@ size_t Librairie::trouverIndexMedia(const std::string& nomMedia) const
 // To do
 Librairie& Librairie::operator+=(std::unique_ptr<Media> media)
 { 
-    if(media == nullptr){
-        return *this; 
+   if (media == nullptr){
+        return *this;
     }
-
     medias_.push_back(std::move(media));
-    return *this;  
+    sort(medias_.begin(), medias_.end(), Media::SortByTypeMedia());
+    return *this;
 }
 
 // To do
 Librairie& Librairie::operator-=(const std::string& nomMedia)
 {
     size_t index = trouverIndexMedia(nomMedia);
-
-    if(index != MEDIA_INEXSISTANT){
-        medias_.erase(medias_.begin() +index); 
+    if (index == MEDIA_INEXSISTANT)
+    {
+        return *this;
     }
+
+    medias_[index] = std::move(medias_[medias_.size() - 1]);
+    medias_.pop_back();
     return *this;
 }
 
@@ -188,9 +198,8 @@ Media* Librairie::chercherMedia(const std::string& nomMedia, Media::TypeMedia ty
     
     if(index != MEDIA_INEXSISTANT){
 
-        Media *media = medias_[index].get(); 
         if(medias_[index]->getTypeMedia() == typeMedia){
-           return media; 
+           return medias_[index].get(); 
         }
     }
     return nullptr; 
@@ -249,28 +258,30 @@ const std::vector<std::unique_ptr<Media>>& Librairie::getMedias() const
 // To do
 bool Librairie::lireLigneEpisode(std::istream& is, GestionnaireAuteurs&)
 {
+    
     Episode episode;
-	is >>  episode;
-	auto ptrEpisode = std::make_unique<Episode>(episode);
-	std::string nomSerie;
-	int numSaison;
-	is >> quoted(nomSerie) >> numSaison;
-	ajouterEpisode(nomSerie, numSaison, move(ptrEpisode));
-
-	return true;
+    std::string nomSerie;
+    int numSaison;
+    if (is >> episode >> std::quoted(nomSerie) >> numSaison)
+    {
+        ajouterEpisode(nomSerie, numSaison, std::make_unique<Episode>(episode));
+        return true;
+    }
+    return false;
 }
 
 // To do
 bool Librairie::lireLigneSaison(std::istream& is, GestionnaireAuteurs&)
 {
     Saison saison;
-	is >>  saison;
-	auto ptrSaison = std::make_unique<Saison>(saison);
-	std::string nomSaison;
-	is >> quoted(nomSaison);
-	ajouterSaison(nomSaison, move(ptrSaison));
+    std::string nomSerie;
+    if (is >> saison >> std::quoted(nomSerie))
+    {
+        ajouterSaison(nomSerie, std::make_unique<Saison>(saison));
+        return true;
+    }
+    return false;
 
-	return true;
 }
 
 // To do

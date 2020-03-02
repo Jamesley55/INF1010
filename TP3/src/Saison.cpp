@@ -27,6 +27,7 @@ nbEpisodesmax_(saison.nbEpisodesmax_)
         auto ptrEpisode = std::make_unique<Episode>(*(saison.episodes_[i]));
         episodes_.push_back(std::move(ptrEpisode));
     }
+
 }
 
 
@@ -69,14 +70,16 @@ Saison& Saison::operator-=(unsigned int numEpisode)
 // au numSaison de l'objet qu'on veut surcharger 
 bool Saison::operator==(unsigned int numSaison)
 {
-    if(numSaison_ == numSaison) return true; 
+    if(numSaison_ == numSaison){
+       return true; 
+    }
+
     return false;
 }
 
 bool operator==(unsigned int numSaison, const Saison& saison)
 {
-    if (saison.numSaison_ == numSaison)
-    {
+    if (saison.numSaison_ == numSaison){
         return true;
     }
     return false;
@@ -86,10 +89,10 @@ bool operator==(unsigned int numSaison, const Saison& saison)
 // affiche tout les attribu de la saison  et tout les episode a l'interieur du vector  episodes_
 std::ostream& operator<<(std::ostream& os, const Saison& saison)
 {
-     os << saison.nbEpisodesmax_ << ""<< saison.numSaison_;
+     os << saison.nbEpisodesmax_ << ":"<< saison.episodes_.size()<< saison.numSaison_;
      for(size_t i = 0; i < saison.episodes_.size(); i++)
      {
-         os << saison.episodes_[i].get();
+         os << *(saison.episodes_[i]);
      }
      return os; 
 }   
@@ -97,12 +100,7 @@ std::ostream& operator<<(std::ostream& os, const Saison& saison)
 // initialiser out les atributs de la classe saison
 std::istream& operator>>(std::istream& is, Saison& saison)
 {
-   is >> saison.nbEpisodesmax_ >> saison.numSaison_; 
-   for(size_t i =0; i < saison.episodes_.size(); i++)
-   {
-       is >> *saison.episodes_[i].get();
-   }
-    
+   is >> saison.nbEpisodesmax_ >> saison.numSaison_;  
     return is;
 }
 
@@ -124,7 +122,9 @@ size_t Saison::trouverIndexEpisode(unsigned int numEpisode)
 
     for(size_t  i= 0; i < this->episodes_.size(); i++)
     {
-        if(numEpisode == this->episodes_[i]->getNumEpisode()) return i ;
+        if(numEpisode == this->episodes_[i]->getNumEpisode()){ 
+            return i ;
+        }
     }
-    return -1 ; 
+    return EPISODE_INEXSISTANTE ; 
 }

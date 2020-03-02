@@ -11,7 +11,7 @@ GestionnaireSaisons::~GestionnaireSaisons()
 //  si la saison existe deja on la rempace par la saison passer en parametre
 GestionnaireSaisons& GestionnaireSaisons::operator+=(std::unique_ptr<Saison> saison)
 {
-   size_t indexSaison = trouverIndexSaison(saison->getNumSaison());
+    size_t indexSaison = trouverIndexSaison(saison->getNumSaison());
     if (indexSaison!= SAISON_INEXSISTANTE)
     {
         saisons_[indexSaison] = std::move(saisons_[saisons_.size() - 1]);
@@ -43,7 +43,7 @@ void GestionnaireSaisons::ajouterEpisode(const unsigned int numSaison,
     size_t index = trouverIndexSaison(numSaison);
     if(index != SAISON_INEXSISTANTE){
 
-        *saisons_[index] += std::move(episode); 
+        *(saisons_[index]) += std::move(episode); 
     }
 
 }
@@ -55,7 +55,7 @@ void GestionnaireSaisons::retirerEpisode(const unsigned int numSaison,
     size_t index = trouverIndexSaison(numSaison); 
 
     if(index != SAISON_INEXSISTANTE){
-        *saisons_[index] -= numEpisode; 
+        *(saisons_[index]) -= numEpisode; 
     }
 }
 
@@ -64,11 +64,12 @@ size_t GestionnaireSaisons::trouverIndexSaison(const unsigned int numSaison) con
 {
     for(size_t i = 0; i < saisons_.size();i++)
     {
-        if(numSaison == saisons_[i]->getNumSaison())
+        if(saisons_[i]->getNumSaison() == numSaison)
         {
             return i ;
         }
     }
+
     return SAISON_INEXSISTANTE; 
 
 }
@@ -76,12 +77,11 @@ size_t GestionnaireSaisons::trouverIndexSaison(const unsigned int numSaison) con
 // return la saison passer en parametre 
 Saison* GestionnaireSaisons::getSaison(const unsigned int numSaison) const
 {
-     unsigned int  index = trouverIndexSaison(numSaison); 
-     if (index != SAISON_INEXSISTANTE){
-       return  saisons_[index].get();
-
-     }
-    return nullptr; 
+  std::size_t  index = trouverIndexSaison(numSaison); 
+  if(index == SAISON_INEXSISTANTE){
+      return nullptr;
+  }
+  return saisons_[index].get(); 
 }
 
 // return le nombre de saison 

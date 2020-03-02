@@ -24,7 +24,9 @@ Episode::Episode(unsigned int numEpisode, const std::string& nom, const std::str
 // est egale au numEpisode de l'attribut qu'on veut surcharger
 bool Episode::operator==(unsigned int numEpisode)
 {
-    if(numEpisode_ == numEpisode)   return true;
+    if(numEpisode_ == numEpisode){
+        return true;
+    }
 
     return false; 
 }
@@ -32,8 +34,7 @@ bool Episode::operator==(unsigned int numEpisode)
 
 bool operator==(unsigned int numEpisode, const Episode& episode)
 {
-    if (episode.numEpisode_ == numEpisode)
-    {
+    if (episode.numEpisode_ == numEpisode){
         return true;
     }
     return false;
@@ -42,7 +43,7 @@ bool operator==(unsigned int numEpisode, const Episode& episode)
 // affiche tout les attributs de l'episode en cascade 
 std::ostream& operator<<(std::ostream& os, const Episode& episode)
 {
-   os << episode.duree_ << "" << episode.nom_ << "" << episode.numEpisode_;
+   os << episode.duree_ << ":" << episode.nom_ << ":" << episode.numEpisode_;
    return os; 
 
 }

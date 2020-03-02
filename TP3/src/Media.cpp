@@ -42,8 +42,8 @@ namespace
 Media::Media(Auteur* auteur, Media::TypeMedia typeMedia):
 nom_("unknow"),
 anneeDeSortie_(0),
-genre_(),
-pays_(),
+genre_(Genre()),
+pays_(Pays()),
 estRestreintParAge_(false),
 paysRestreints_(),
 auteur_(auteur), 
@@ -60,8 +60,7 @@ genre_(genre),
  pays_(pays),
 estRestreintParAge_(estRestreintParAge)
 , auteur_(auteur),
-typeMedia_(typeMedia),
-paysRestreints_()
+typeMedia_(typeMedia)
 {
 }
 
@@ -75,6 +74,7 @@ pays_(serie.pays_),
 typeMedia_(serie.typeMedia_),
 auteur_(serie.auteur_)
 {
+    paysRestreints_.clear(); 
     for( unsigned int i  = 0; i < serie.paysRestreints_.size(); i++){
       paysRestreints_.push_back(serie.paysRestreints_[i]); 
 
@@ -85,7 +85,7 @@ auteur_(serie.auteur_)
 // To do
 Media::~Media()
 {
-    paysRestreints_.clear(); 
+    auteur_->setNbMedias(auteur_->getNbMedias()-1);
 }
 
 //! Méthode qui ajoute un pays à liste des pays restreints du film
@@ -117,25 +117,28 @@ bool Media::estRestreintDansPays(Pays pays) const
 // \return Un bool représentant si le film est restreint aux moins de 16 ans
 bool Media::estRestreintParAge() const
 {
-        return estRestreintParAge_;
+    return estRestreintParAge_;
 }
 
 // To do
 std::ostream& Media::afficher(std::ostream& os) const
 {
     os << 
-    nom_<<
-    anneeDeSortie_ << 
-    getGenreString(genre_) <<
-    estRestreintParAge_ <<
-    getPaysString(pays_) <<
-    *auteur_ ; 
+    "\n\t Nom:"<< nom_ << 
+    "\n\tDate de sortie:" <<  anneeDeSortie_ << 
+    "\n\tGenre:" << getGenreString(genre_) <<
+    "\n\tPays;:" << estRestreintParAge_ <<
+    "\n\tPays:"  << getPaysString(pays_) <<
+    "\n\tAuteur:" <<auteur_->getNom() ; 
+
     if (paysRestreints_.size()==0){
-      os << " il n'y a pas de pays restrients"; 
+      os << "\n\tAucun pays restrient."; 
     }
     for(unsigned int i =0; i < paysRestreints_.size(); i++){
-        os << getPaysString(paysRestreints_[i]); 
+        os << "\n\t\t" << getPaysString(paysRestreints_[i]); 
     }
+    os << "\n"; 
+
     return os; 
 
 }
@@ -143,7 +146,8 @@ std::ostream& Media::afficher(std::ostream& os) const
 // To do 
 std::ostream& operator<<(std::ostream& os, const Media& media)
 {
-     return media.afficher(os);
+     media.afficher(os);
+     return os; 
 }
 
 // To do
@@ -175,16 +179,16 @@ std::istream& Media::lire(std::istream& is)
     int genre;
     int pays; 
 
-   if (is >> 
+   is >> 
    std::quoted(nom_) >> 
    anneeDeSortie_ >>
    genre >> 
    pays  >>
-   estRestreintParAge_){
+   estRestreintParAge_;
 
    genre_ = to_enum<Media::Genre>(genre);
    pays_ = to_enum<Pays>(pays); 
-   }
+   
 
     return is ; 
 

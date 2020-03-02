@@ -68,7 +68,6 @@ bool GestionnaireAuteurs::operator+=(const Auteur& auteur)
 std::ostream& operator<<(std::ostream& os, const GestionnaireAuteurs& gestionnaireAuteurs)
 {
     for (size_t i = 0; i < gestionnaireAuteurs.auteurs_.size(); i++)
-        // if(gestionnaireAuteurs.auteurs_[i] != NULL)
         os << gestionnaireAuteurs.auteurs_[i] << '\n';
 
     return os;
