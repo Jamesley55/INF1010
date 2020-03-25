@@ -9,7 +9,7 @@ GestionnaireAuteurs::GestionnaireAuteurs()
 //! Méhode qui cherche un auteur par son nom complet
 //! \param nomAuteur Le nom de l'auteur à trouver
 //! \return          Un pointeur vers l'auteur. Le pointeur est nullptr si l'auteur n'existe pas.
-Auteur *GestionnaireAuteurs::chercherAuteur(const std::string &nomAuteur)
+Auteur* GestionnaireAuteurs::chercherAuteur(const std::string& nomAuteur)
 {
     for (size_t i = 0; i < auteurs_.size(); i++)
         if (auteurs_[i] == nomAuteur)
@@ -21,7 +21,7 @@ Auteur *GestionnaireAuteurs::chercherAuteur(const std::string &nomAuteur)
 //! Méthode qui prend un nom de fichier en paramètre et qui charge les auteurs
 //! \param nomFichier   Le nom du fichier à charger
 //! \return             Un bool représentant si le chargement a été un succès
-bool GestionnaireAuteurs::chargerDepuisFichier(const std::string &nomFichier)
+bool GestionnaireAuteurs::chargerDepuisFichier(const std::string& nomFichier)
 {
     std::ifstream fichier(nomFichier);
     if (fichier)
@@ -53,7 +53,7 @@ size_t GestionnaireAuteurs::getNbAuteurs() const
 //! opérateur qui ajoute un auteur à la liste des auteurs
 //! \param auteur L'auteur à ajouter
 //! \return       Un bool représentant si l'opération a fonctionnné
-bool GestionnaireAuteurs::operator+=(const Auteur &auteur)
+bool GestionnaireAuteurs::operator+=(const Auteur& auteur)
 {
     if (auteurs_.size() >= NB_AUTEURS_MAX)
         return false;
@@ -65,7 +65,7 @@ bool GestionnaireAuteurs::operator+=(const Auteur &auteur)
 //! opérateur qui affiche le film
 //! \param os Le stream dans lequel afficher
 //! \param gestionnaireAuteurs le gestionnaire que l'on veut afficher
-std::ostream &operator<<(std::ostream &os, const GestionnaireAuteurs &gestionnaireAuteurs)
+std::ostream& operator<<(std::ostream& os, const GestionnaireAuteurs& gestionnaireAuteurs)
 {
     for (size_t i = 0; i < gestionnaireAuteurs.auteurs_.size(); i++)
         os << gestionnaireAuteurs.auteurs_[i] << '\n';

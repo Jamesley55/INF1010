@@ -5,15 +5,19 @@
 //! \param age          L'âge de l'utilisateur
 //! \param estPremium   Bool représentant si l'utilisateur est premium
 //! \param pays         Pays de l'utilisateur
-Utilisateur::Utilisateur(const std::string &nom, unsigned int age, bool estPremium, Pays pays)
-    : nom_(nom), age_(age), nbMediasVus_(0), estPremium_(estPremium), pays_(pays)
+Utilisateur::Utilisateur(const std::string& nom, unsigned int age, bool estPremium, Pays pays)
+    : nom_(nom)
+    , age_(age)
+    , nbMediasVus_(0)
+    , estPremium_(estPremium)
+    , pays_(pays)
 {
 }
 
 //! Méthode qui retourne si le film est disponible pour un utilisateur
 //! \param film Le film à évaluer
 //! \return Un bool représentant si un film est disponible à l'utilisateur
-bool Utilisateur::mediaEstDisponible(const Media &media) const
+bool Utilisateur::mediaEstDisponible(const Media& media) const
 {
     static constexpr unsigned int AGE_MINIMUM_POUR_FILMS_RESTREINTS = 16;
 
@@ -35,7 +39,7 @@ bool Utilisateur::nbLimiteMediasAtteint() const
 
 //! Méthode qui incrémente le nombre de films vus par l'utilisateur
 //! \return Un bool représentant si l'utilisateur a pu regarder le film
-bool Utilisateur::regarderMedia(const Media &media)
+bool Utilisateur::regarderMedia(const Media& media)
 {
     if (nbLimiteMediasAtteint() == false && mediaEstDisponible(media))
     {

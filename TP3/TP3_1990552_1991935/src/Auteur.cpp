@@ -1,23 +1,26 @@
 // To do
-#include "Auteur.h"
+#include"Auteur.h"
 // To do
-Auteur::Auteur() : nom_(""),
-                   anneeDeNaissance_(0),
-                   nbMedias_(0)
+Auteur::Auteur():
+nom_(""),
+anneeDeNaissance_(0),
+nbMedias_(0)
 {
 }
 
 //! Constructeur de la classe Auteur
 //! \param nom              Nom de l'auteur
 //! \param anneeDeNaissance Année de naissance de l'auteur
-Auteur::Auteur(const std::string &nom, unsigned int anneeDeNaissance)
-    : nom_(nom), anneeDeNaissance_(anneeDeNaissance), nbMedias_(0)
+Auteur::Auteur(const std::string& nom, unsigned int anneeDeNaissance)
+    : nom_(nom)
+    , anneeDeNaissance_(anneeDeNaissance)
+    , nbMedias_(0)
 {
 }
 
 //! Méthode qui retourne le nom de l'auteur
 //! \return Le nom de l'auteur
-const std::string &Auteur::getNom() const
+const std::string& Auteur::getNom() const
 {
     return nom_;
 }
@@ -46,12 +49,12 @@ void Auteur::setNbMedias(unsigned int nbFilms)
 //! Opérateur qui compare un string avec le nom de l'auteur avec auteur comme opérande de gauche
 //! \param nom le nom avec le quel on veut comparé l'auteur
 //! \return vrai si les noms sont identique, faux sinon
-bool Auteur::operator==(const std::string &nom) const
+bool Auteur::operator==(const std::string& nom) const
 {
     return (nom_ == nom);
 }
 
-bool operator==(const std::string &nom, const Auteur &auteur)
+bool operator==(const std::string& nom, const Auteur& auteur)
 {
     return nom == auteur.nom_;
 }
@@ -59,17 +62,17 @@ bool operator==(const std::string &nom, const Auteur &auteur)
 //! operateur qui affiche un auteur
 //! \param os Le stream dans lequel afficher
 //! \param auteur l'auteur a afficher
-std::ostream &operator<<(std::ostream &os, const Auteur &auteur)
+std::ostream& operator<<(std::ostream& os, const Auteur& auteur)
 {
-    os << "Nom: " << auteur.nom_ << " | Date de naissance: " << auteur.anneeDeNaissance_
+    os <<"Nom: " << auteur.nom_ << " | Date de naissance: " << auteur.anneeDeNaissance_
        << " | Nombre de Film/Serie: " << auteur.nbMedias_;
 
     return os;
 }
 
 // To do
-std::istream &operator>>(std::istream &is, Auteur &auteur)
+std::istream& operator>>(std::istream& is, Auteur& auteur)
 {
-    is >> std::quoted(auteur.nom_) >> auteur.anneeDeNaissance_;
-    return is;
+    is >> std::quoted(auteur.nom_) >> auteur.anneeDeNaissance_; 
+    return is; 
 }
