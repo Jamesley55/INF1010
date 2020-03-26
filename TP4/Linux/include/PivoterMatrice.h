@@ -9,26 +9,30 @@
 
 #include "def.h"
 
-template <class M> class PivoterMatrice {
+template <class M>
+class PivoterMatrice
+{
 public:
-  // Constructeurs
-  PivoterMatrice();
-  PivoterMatrice(M *matrice);
-  // Destructeur
-  ~PivoterMatrice() = default;
-  void pivoterMatrice(Direction direction);
+	// Constructeurs
+	PivoterMatrice();
+	PivoterMatrice(M *matrice);
+	// Destructeur
+	~PivoterMatrice() = default;
+	void pivoterMatrice(Direction direction);
 
 private:
-  Coordonnees changerCoordonneesCentreMatrice(Coordonnees coords) const;
-  Coordonnees recupererCoordonnees(Coordonnees coords) const;
-  M *matrice_;
+	Coordonnees changerCoordonneesCentreMatrice(Coordonnees coords) const;
+	Coordonnees recupererCoordonnees(Coordonnees coords) const;
+	M *matrice_;
 };
 
 /**
  * @brief constructeur par défaut de la classe
  */
-template <class M> inline PivoterMatrice<M>::PivoterMatrice() {
-  // TO DO
+template <class M>
+inline PivoterMatrice<M>::PivoterMatrice()
+{
+	matrice_ = new matrice();
 }
 /**
  * @brief constructeur par paramètre de la classe
@@ -41,9 +45,10 @@ inline PivoterMatrice<M>::PivoterMatrice(M *matrice) : matrice_(matrice) {}
  */
 template <class M>
 inline Coordonnees
-PivoterMatrice<M>::changerCoordonneesCentreMatrice(Coordonnees coords) const {
-  // TO DO
-  return {};
+PivoterMatrice<M>::changerCoordonneesCentreMatrice(Coordonnees coords) const
+{
+	// TO DO
+	return {};
 }
 /**
  * @brief revenir au système précédent, trouver les coordonnées du point par
@@ -52,9 +57,10 @@ PivoterMatrice<M>::changerCoordonneesCentreMatrice(Coordonnees coords) const {
  */
 template <class M>
 inline Coordonnees
-PivoterMatrice<M>::recupererCoordonnees(Coordonnees coords) const {
-  // TO DO
-  return {};
+PivoterMatrice<M>::recupererCoordonnees(Coordonnees coords) const
+{
+	// TO DO
+	return {};
 }
 
 #endif

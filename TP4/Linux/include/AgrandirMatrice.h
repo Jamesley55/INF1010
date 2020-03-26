@@ -8,24 +8,28 @@
 
 #include "def.h"
 
-template <class M> class AgrandirMatrice {
+template <class M>
+class AgrandirMatrice
+{
 public:
-  AgrandirMatrice();
-  AgrandirMatrice(M *matrice);
-  ~AgrandirMatrice() = default;
-  Coordonnees trouverLePlusProcheVoisin(const unsigned int &rapport,
-                                        size_t posY, size_t posX) const;
-  void redimensionnerImage(const unsigned int &rapport);
+	AgrandirMatrice();
+	AgrandirMatrice(M *matrice);
+	~AgrandirMatrice() = default;
+	Coordonnees trouverLePlusProcheVoisin(const unsigned int &rapport,
+										  size_t posY, size_t posX) const;
+	void redimensionnerImage(const unsigned int &rapport);
 
 private:
-  M *matrice_;
+	M *matrice_;
 };
 
 /**
  * @brief constructeur par défaut de la classe
  */
-template <class M> AgrandirMatrice<M>::AgrandirMatrice() {
-  // TO DO
+template <class M>
+AgrandirMatrice<M>::AgrandirMatrice()
+{
+	matrice_ = new Matrice();
 }
 /**
  * @brief constructeur par paramètre de la classe
@@ -43,9 +47,30 @@ AgrandirMatrice<M>::AgrandirMatrice(M *matrice) : matrice_(matrice) {}
 template <class M>
 Coordonnees
 AgrandirMatrice<M>::trouverLePlusProcheVoisin(const unsigned int &rapport,
-                                              size_t posY, size_t posX) const {
-  // TO DO
-  return {};
+											  size_t posY, size_t posX) const
+{
+
+	return {int(posY / rapport), int(posX / rapport)};
+}
+template <class M>
+void AgrandirMatrice<M>::redimensionnerImage(const unsigned int &rapport)
+{
+
+	std::unique_ptr<M> copie = matrice_->clone();
+
+	matrice_->setHeight(rapport * matrice_->getHeight());
+	matrice_->setWidth(rapport * matrice_->getWidth());
+
+	size_t tailleMatrice = matrice_->getHeight();
+
+	for (size_t heightIndex = 0; heightIndex < tailleMatrice; heightIndex++)
+	{
+		for (size_t widthIndex = 0; widthIndex < tailleMatrice; widthIndex++)
+		{
+			Coordonnees position = trouverLePlusProcheVoisin(rapport, heightIndex, widthIndex);
+			matrice_->ajouterElement(copie->operator()(position.y, position.x), heightIndex, widthIndex);
+		}
+	}
 }
 
 #endif
