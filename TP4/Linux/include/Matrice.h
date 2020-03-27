@@ -89,7 +89,18 @@ T Matrice<T>::operator()(const size_t &posY, const size_t &posX) const
 template <typename T>
 bool Matrice<T>::ajouterElement(T element, const size_t &posY, const size_t &posX)
 {
-	elements_[posX][posY] = element;
+	if (posY > height_ || posX > width_)
+	{
+		return false;
+	}
+
+	elements_.resize(CAPACITE_MATRICE);
+
+	for (size_t i = 0; i < elements_.size(); ++i)
+	{
+		elements_[i].resize(CAPACITE_MATRICE);
+	}
+	elements_[posY][posX] = element;
 	return true;
 }
 template <typename T>

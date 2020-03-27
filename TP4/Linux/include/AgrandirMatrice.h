@@ -29,7 +29,7 @@ private:
 template <class M>
 AgrandirMatrice<M>::AgrandirMatrice()
 {
-	matrice_ = new M();
+	matrice_ = new M;
 }
 /**
  * @brief constructeur par paramètre de la classe

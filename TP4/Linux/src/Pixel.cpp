@@ -70,8 +70,8 @@ std::ostream &operator<<(std::ostream &os, Pixel pixel)
 	os << "#";
 	os << std::uppercase
 	   << std::hex
-	   << std::setfill('0')
 	   << std::setw(2)
+	   << std::setfill('0')
 	   << unsigned(pixel.getRouge())
 	   << " " << std::setw(2)
 	   << unsigned(pixel.getVert())
@@ -82,7 +82,7 @@ std::ostream &operator<<(std::ostream &os, Pixel pixel)
 
 std::istream &operator>>(std::istream &is, Pixel &pixel)
 {
-	uint8_t rouge, vert, bleu;
+	int rouge, vert, bleu;
 	is >> rouge >> vert >> bleu;
 
 	pixel.setRouge(rouge);

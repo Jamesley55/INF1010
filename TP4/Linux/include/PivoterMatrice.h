@@ -80,13 +80,12 @@ void PivoterMatrice<M>::pivoterMatrice(Direction direction)
 	{
 		for (int widthIndex = 0; widthIndex < int(width); widthIndex++)
 		{
-
 			auto coo = changerCoordonneesCentreMatrice({widthIndex, heightIndex});
-			if (direction == Direction::Right)
+			if (direction == Direction::Left)
 			{
 				x = coo.y, y = -coo.x;
 			}
-			else if (direction == Direction::Left)
+			else if (direction == Direction::Right)
 			{
 				x = -coo.y, y = coo.x;
 			}

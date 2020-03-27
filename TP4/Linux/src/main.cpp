@@ -89,7 +89,6 @@ int main()
 		delete imageCouleur;
 	}
 
-#else
 	// Tests de la classe Pixel: Tests 1-4
 #if true
 	Pixel pixel;
