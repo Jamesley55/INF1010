@@ -16,38 +16,38 @@ Pixel::Pixel(uint8_t rouge, uint8_t vert, uint8_t bleu)
 void Pixel::operator=(const Pixel &pixel)
 {
 	// TO DO
-	bleu_ == pixel.bleu_;
+	bleu_ = pixel.bleu_;
 	rouge_ = pixel.rouge_;
 	vert_ = pixel.vert_;
 }
 
 void Pixel::setRouge(int rouge)
 {
-	rouge_ = rouge < 0 ? 0					  // si rouge est < 0 on initialise la variable rouge_ a zero
-											  // sinon on continue sur la prochaine ligne
-					   : rouge > 255 ? 255	  // si rouge est > 255 on initialise la variable rouge_ a 255
-											  // sinon on continue sur la prochaine ligne
-									 : rouge; // on initialise la variable rouge_ a rouge
+	rouge_ = rouge < 0 ? uint8_t(0)					   // si rouge est < 0 on initialise la variable rouge_ a zero
+													   // sinon on continue sur la prochaine ligne
+					   : rouge > 255 ? uint8_t(255)	   // si rouge est > 255 on initialise la variable rouge_ a 255
+													   // sinon on continue sur la prochaine ligne
+									 : uint8_t(rouge); // on initialise la variable rouge_ a rouge
 }
 
 void Pixel::setVert(int vert)
 {
 	// TO DO
-	vert_ = vert < 0 ? 0				  // si vert est < 0 on initialise la variable vert_ a zero
-										  // sinon on continue sur la prochaine ligne
-					 : vert > 255 ? 255	  // si vert est > 255 on initialise la variable vert_ a 255
-										  // sinon on continue sur la prochaine ligne
-								  : vert; // on initialise la variable vert_ a vert
+	vert_ = vert < 0 ? uint8_t(0)				   // si vert est < 0 on initialise la variable vert_ a zero
+												   // sinon on continue sur la prochaine ligne
+					 : vert > 255 ? uint8_t(255)   // si vert est > 255 on initialise la variable vert_ a 255
+												   // sinon on continue sur la prochaine ligne
+								  : uint8_t(vert); // on initialise la variable vert_ a vert
 }
 
 void Pixel::setBleu(int bleu)
 {
 	// TO DO
-	bleu_ = bleu < 0 ? 0				  // si blue est < 0 on initialise la variable blue_ a zero
-										  // sinon on continue sur la prochaine ligne
-					 : bleu > 255 ? 255	  // si blue est > 255 on initialise la variable blue_ a 255
-										  // sinon on continue sur la prochaine ligne
-								  : bleu; // on initialise la variable blue_ a vert
+	bleu_ = bleu < 0 ? uint8_t(0)				   // si blue est < 0 on initialise la variable blue_ a zero
+												   // sinon on continue sur la prochaine ligne
+					 : bleu > 255 ? uint8_t(255)   // si blue est > 255 on initialise la variable blue_ a 255
+												   // sinon on continue sur la prochaine ligne
+								  : uint8_t(bleu); // on initialise la variable blue_ a vert
 }
 /**
  * @brief retourn l'attribut rouge_ du pixel
@@ -68,8 +68,8 @@ uint8_t Pixel::getBleu() const { return bleu_; }
 std::ostream &operator<<(std::ostream &os, Pixel pixel)
 {
 	os << "#";
-	os << std::hex
-	   << std::uppercase
+	os << std::uppercase
+	   << std::hex
 	   << std::setfill('0')
 	   << std::setw(2)
 	   << unsigned(pixel.getRouge())

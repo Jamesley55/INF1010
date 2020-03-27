@@ -56,7 +56,7 @@ inline Matrice<T>::Matrice()
 {
 	height_ = 0;
 	width_ = 0;
-	elements_ = CAPACITE_MATRICE;
+	elements_ = std::vector<std::vector<T>>(CAPACITE_MATRICE);
 }
 /**
  * @brief retourne le nombre de lignes de la matrice
@@ -79,70 +79,97 @@ inline size_t Matrice<T>::getWidth() const
 template <typename T>
 T Matrice<T>::operator()(const size_t &posY, const size_t &posX) const
 {
-	posY > height_ || posX > width_ ? return T();
+	if (posY > height_ || posX > width_)
+	{
+		return T();
+	}
 	return elements_[posX][posY];
 }
 
 template <typename T>
 bool Matrice<T>::ajouterElement(T element, const size_t &posY, const size_t &posX)
 {
-	elements_[posX][posY] = elements;
+	elements_[posX][posY] = element;
 	return true;
 }
 template <typename T>
 bool Matrice<T>::lireElement(const std::string &elementFichier, const size_t &posY,
 							 const size_t &posX)
 {
+	std::istringstream input(elementFichier);
 	T element;
-	std::stringstream input(elementFichier);
-	input >> element;
-	return (ajouterElement(element, posY, posX));
+	if (input >> element)
+	{
+		return (ajouterElement(element, posY, posX));
+	}
+	return false;
 }
 template <typename T>
 bool Matrice<T>::chargerDepuisFichier(const std::string &nomFichier)
 {
 	std::ifstream fichier(nomFichier);
-	if (fichier)
+	if (fichier.is_open())
 	{
-		std::string ligne;
-		size_t x = 0;
-		size_t y = 0;
-
-		while (std::getline(fichier, ligne))
+		std::string str;
+		int taille = 0;
+		while (!fichier.eof())
 		{
-			if (ligne == "L" && x != 0)
+			fichier >> str;
+			if (str == "L")
 			{
-				if (width_ < x)
-					setWidth(x);
-
-				y++;
-				x = 0;
-			}
-
-			else if (ligne != "L")
-			{
-				lireElement(ligne, y, x);
-				x++;
+				taille++;
 			}
 		}
-		setHeight(y + 1);
+
+		for (int i = 0; i < taille; i++)
+		{
+			elements_[i].resize(taille);
+		}
+
+		width_ = height_ = taille;
+
+		fichier.clear();
+		fichier.seekg(0, std::ios::beg);
+		std::string line;
+		int y = 0;
+		std::getline(fichier, line);
+		for (int i = 0; i < taille; i++)
+		{
+			for (int j = 0; j < taille; j++)
+			{
+				std::getline(fichier, line);
+				lireElement(line, y, j);
+			}
+			++y;
+			std::getline(fichier, line);
+		}
+
+		return true;
 	}
-	return true;
+	std::cout << "fichier introuvable";
+	return false;
 }
 template <typename T>
 std::unique_ptr<Matrice<T>> Matrice<T>::clone() const
 {
-	auto mat = std::make_unique<Matrice>(*this);
-	return std::move(mat);
+	auto clone = std::make_unique<Matrice>(*this);
+	return std::move(clone);
 }
 template <typename T>
 void Matrice<T>::setHeight(size_t height)
 {
-	height_ = height;
+	bool a = (height > CAPACITE_MATRICE);
+	bool b = (height < 0);
+	height_ = height - (height - CAPACITE_MATRICE) * a - height * b;
+	elements_.resize(height);
 }
 template <typename T>
 void Matrice<T>::setWidth(size_t width)
 {
-	width_ = width;
+	bool a = (width > CAPACITE_MATRICE);
+	bool b = (width < 0);
+	width_ = width - (width - CAPACITE_MATRICE) * a - width * b;
+	for (int i = 0; i < elements_.size(); i++)
+		elements_[i].resize(width_);
 }
 #endif

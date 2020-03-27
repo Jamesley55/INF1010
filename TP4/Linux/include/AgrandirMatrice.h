@@ -29,7 +29,7 @@ private:
 template <class M>
 AgrandirMatrice<M>::AgrandirMatrice()
 {
-	matrice_ = new Matrice();
+	matrice_ = new M();
 }
 /**
  * @brief constructeur par paramètre de la classe
@@ -56,18 +56,22 @@ template <class M>
 void AgrandirMatrice<M>::redimensionnerImage(const unsigned int &rapport)
 {
 
-	std::unique_ptr<M> copie = matrice_->clone();
+	std::unique_ptr<M> copie = move(matrice_->clone());
 
 	matrice_->setHeight(rapport * matrice_->getHeight());
 	matrice_->setWidth(rapport * matrice_->getWidth());
 
-	size_t tailleMatrice = matrice_->getHeight();
+	size_t height = matrice_->getHeight();
+	size_t width = matrice_->getWidth();
 
-	for (size_t heightIndex = 0; heightIndex < tailleMatrice; heightIndex++)
+	for (int heightIndex = 0; heightIndex < int(height); heightIndex++)
 	{
-		for (size_t widthIndex = 0; widthIndex < tailleMatrice; widthIndex++)
+		for (int widthIndex = 0; widthIndex < int(width); widthIndex++)
 		{
-			Coordonnees position = trouverLePlusProcheVoisin(rapport, heightIndex, widthIndex);
+			Coordonnees position;
+			position.y = trouverLePlusProcheVoisin(rapport, heightIndex, widthIndex).y;
+			position.x = trouverLePlusProcheVoisin(rapport, heightIndex, widthIndex).x;
+
 			matrice_->ajouterElement(copie->operator()(position.y, position.x), heightIndex, widthIndex);
 		}
 	}

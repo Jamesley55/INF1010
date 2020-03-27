@@ -32,7 +32,7 @@ private:
 template <class M>
 inline PivoterMatrice<M>::PivoterMatrice()
 {
-	matrice_ = new matrice();
+	matrice_ = new M();
 }
 /**
  * @brief constructeur par paramètre de la classe
@@ -48,7 +48,10 @@ inline Coordonnees
 PivoterMatrice<M>::changerCoordonneesCentreMatrice(Coordonnees coords) const
 {
 	// TO DO
-	return {};
+	return {
+		coords.y - int(matrice_->getHeight() / 2), // coordoner en y
+		coords.x - int(matrice_->getWidth() / 2)   // coordoner en x
+	};
 }
 /**
  * @brief revenir au système précédent, trouver les coordonnées du point par
@@ -60,7 +63,37 @@ inline Coordonnees
 PivoterMatrice<M>::recupererCoordonnees(Coordonnees coords) const
 {
 	// TO DO
-	return {};
+	return {
+		coords.y + int(matrice_->getHeight() / 2), // coordoner en y
+		coords.x + int(matrice_->getWidth() / 2)   // coordoner en x
+	};
+}
+template <class M>
+void PivoterMatrice<M>::pivoterMatrice(Direction direction)
+{
+	int x, y;
+	std::unique_ptr<M> copie = matrice_->clone();
+	size_t Height = matrice_->getHeight();
+	size_t width = matrice_->getWidth();
+
+	for (int heightIndex = 0; heightIndex < int(Height); heightIndex++)
+	{
+		for (int widthIndex = 0; widthIndex < int(width); widthIndex++)
+		{
+
+			auto coo = changerCoordonneesCentreMatrice({widthIndex, heightIndex});
+			if (direction == Direction::Right)
+			{
+				x = coo.y, y = -coo.x;
+			}
+			else if (direction == Direction::Left)
+			{
+				x = -coo.y, y = coo.x;
+			}
+			coo = recupererCoordonnees({x, y});
+			matrice_->ajouterElement(copie->operator()(heightIndex, widthIndex), coo.y, coo.x);
+		}
+	}
 }
 
 #endif
