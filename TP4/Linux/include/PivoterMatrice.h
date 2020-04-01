@@ -68,6 +68,11 @@ PivoterMatrice<M>::recupererCoordonnees(Coordonnees coords) const
 		coords.x + int(matrice_->getWidth() / 2)   // coordoner en x
 	};
 }
+/**
+ * @brief privoter une matrice dans une direction donner
+ * @param direction, la direction vers lequel on veut pivoter la matrice 
+ */
+
 template <class M>
 void PivoterMatrice<M>::pivoterMatrice(Direction direction)
 {

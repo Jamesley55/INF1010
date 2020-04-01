@@ -52,6 +52,10 @@ AgrandirMatrice<M>::trouverLePlusProcheVoisin(const unsigned int &rapport,
 
 	return {int(posY / rapport), int(posX / rapport)};
 }
+/**
+ * @brief Agrandit une matrice selon un rapport 
+ * @param rapport, le rapport de grandeur quon doit agrandir la matrice 
+ */
 template <class M>
 void AgrandirMatrice<M>::redimensionnerImage(const unsigned int &rapport)
 {

@@ -76,6 +76,13 @@ inline size_t Matrice<T>::getWidth() const
 {
 	return width_;
 }
+
+/**
+ * @brief Retourne l’élément se trouvant à la ligne posY et la colonne posX du tableau elements_.
+ * @param posY, la colonne du point dans la nouvelle image
+ * @param posX, la ligne du point dans la nouvelle image
+ * @return l'élément a la position (x,y), si non trouvé, retourne T()
+ */
 template <typename T>
 T Matrice<T>::operator()(const size_t &posY, const size_t &posX) const
 {
@@ -85,7 +92,13 @@ T Matrice<T>::operator()(const size_t &posY, const size_t &posX) const
 	}
 	return elements_[posX][posY];
 }
-
+/**
+ * @brief ajoute un element dans un tableau d'element 
+ * @param element l'element quon veut ajouter  dans le tableau 
+ * @param posY, la position  y de l'ement a ajouter dans le tableau 
+ * @param posX, la position x de l'element a ajouter dans le tableau 
+ * @return true si l'operation est un succes
+ */
 template <typename T>
 bool Matrice<T>::ajouterElement(T element, const size_t &posY, const size_t &posX)
 {
@@ -93,16 +106,10 @@ bool Matrice<T>::ajouterElement(T element, const size_t &posY, const size_t &pos
 	{
 		return false;
 	}
-
-	elements_.resize(CAPACITE_MATRICE);
-
-	for (size_t i = 0; i < elements_.size(); ++i)
-	{
-		elements_[i].resize(CAPACITE_MATRICE);
-	}
 	elements_[posY][posX] = element;
 	return true;
 }
+
 template <typename T>
 bool Matrice<T>::lireElement(const std::string &elementFichier, const size_t &posY,
 							 const size_t &posX)
@@ -115,6 +122,11 @@ bool Matrice<T>::lireElement(const std::string &elementFichier, const size_t &po
 	}
 	return false;
 }
+
+/* @brief Lit les éléments d'une matrice depuis un fichier et les ajoutes
+ * @param nomFichier, le fichier contenant la matrice
+ * @return un bool; true si l'opération a réussi, sinon false si échec
+ */
 template <typename T>
 bool Matrice<T>::chargerDepuisFichier(const std::string &nomFichier)
 {
@@ -160,12 +172,21 @@ bool Matrice<T>::chargerDepuisFichier(const std::string &nomFichier)
 	std::cout << "fichier introuvable";
 	return false;
 }
+/**
+ * @brief Copie une matrice  
+ * @return un pointeur vers la matrice copiée
+ */
+
 template <typename T>
 std::unique_ptr<Matrice<T>> Matrice<T>::clone() const
 {
 	auto clone = std::make_unique<Matrice>(*this);
 	return std::move(clone);
 }
+
+/** @brief Set la valeur height_ et fait un resize de la matrice
+ * @param height, la valeur à setter height_
+ */
 template <typename T>
 void Matrice<T>::setHeight(size_t height)
 {
@@ -174,13 +195,18 @@ void Matrice<T>::setHeight(size_t height)
 	height_ = height - (height - CAPACITE_MATRICE) * a - height * b;
 	elements_.resize(height);
 }
+/**
+ * @brief Set la valeur width_ et fait un resize de la matrice
+ * @param width, la valeur à setter width_
+ */
+
 template <typename T>
 void Matrice<T>::setWidth(size_t width)
 {
 	bool a = (width > CAPACITE_MATRICE);
 	bool b = (width < 0);
 	width_ = width - (width - CAPACITE_MATRICE) * a - width * b;
-	for (int i = 0; i < elements_.size(); i++)
+	for (unsigned int i = 0; i < elements_.size(); i++)
 		elements_[i].resize(width_);
 }
 #endif

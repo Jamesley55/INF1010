@@ -13,13 +13,22 @@ Pixel::Pixel() : rouge_(0), vert_(0), bleu_(0) {}
 Pixel::Pixel(uint8_t rouge, uint8_t vert, uint8_t bleu)
 	: rouge_(rouge), vert_(vert), bleu_(bleu) {}
 
+/**
+ * @brief copie d'un pixel
+ * @param pixel, le pixel à copier
+ */
+
 void Pixel::operator=(const Pixel &pixel)
 {
-	// TO DO
 	bleu_ = pixel.bleu_;
 	rouge_ = pixel.rouge_;
 	vert_ = pixel.vert_;
 }
+
+/**
+ * @brief Set la valeur du paramètre de pixel
+ * @param rouge, l'élément Rouge du pixel
+ */
 
 void Pixel::setRouge(int rouge)
 {
@@ -30,19 +39,24 @@ void Pixel::setRouge(int rouge)
 									 : uint8_t(rouge); // on initialise la variable rouge_ a rouge
 }
 
+/**
+ * @brief Set la valeur du paramètre de pixel
+ * @param bleu, l'élément vert du pixel
+ */
 void Pixel::setVert(int vert)
 {
-	// TO DO
 	vert_ = vert < 0 ? uint8_t(0)				   // si vert est < 0 on initialise la variable vert_ a zero
 												   // sinon on continue sur la prochaine ligne
 					 : vert > 255 ? uint8_t(255)   // si vert est > 255 on initialise la variable vert_ a 255
 												   // sinon on continue sur la prochaine ligne
 								  : uint8_t(vert); // on initialise la variable vert_ a vert
 }
-
+/**
+ * @brief Set la valeur du paramètre de pixel
+ * @param bleu, l'élément bleu du pixel
+ */
 void Pixel::setBleu(int bleu)
 {
-	// TO DO
 	bleu_ = bleu < 0 ? uint8_t(0)				   // si blue est < 0 on initialise la variable blue_ a zero
 												   // sinon on continue sur la prochaine ligne
 					 : bleu > 255 ? uint8_t(255)   // si blue est > 255 on initialise la variable blue_ a 255
@@ -65,6 +79,13 @@ uint8_t Pixel::getVert() const { return vert_; }
  */
 uint8_t Pixel::getBleu() const { return bleu_; }
 
+/**
+ * @brief Opérateur permetant d'afficher un pixel en hexadécimal
+ * @param os, le stream d'affichage
+ * @param pixel, le pixel à afficher
+ * @return ostream
+ */
+
 std::ostream &operator<<(std::ostream &os, Pixel pixel)
 {
 	os << "#";
@@ -79,6 +100,13 @@ std::ostream &operator<<(std::ostream &os, Pixel pixel)
 	   << unsigned(pixel.getBleu());
 	return os;
 }
+
+/**
+ * @brief Opérateur permetant d'afficher un pixel en hexadécimal
+ * @param os, le stream des donner
+ * @param pixel, le pixel qi recevras les donner 
+ * @return istream
+ */
 
 std::istream &operator>>(std::istream &is, Pixel &pixel)
 {
