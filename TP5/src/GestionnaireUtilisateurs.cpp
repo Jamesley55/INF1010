@@ -1,7 +1,7 @@
 /// Gestionnaire d'utilisateurs.
 /// \author Misha Krieger-Raynauld
 /// \date 2020-01-12
-/// modifié 2020-03-15 par Jamesley Joseph
+/// modifié 2020-04-15 par Jamesley Joseph
 
 #include "GestionnaireUtilisateurs.h"
 #include <fstream>

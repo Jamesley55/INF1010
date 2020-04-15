@@ -13,21 +13,21 @@
 class GestionnaireUtilisateurs
 {
 public:
-    // Surcharges d'opérateurs
-    friend std::ostream& operator<<(std::ostream& outputStream,
-                                    const GestionnaireUtilisateurs& gestionnaireUtilisateurs);
+	// Surcharges d'opérateurs
+	friend std::ostream &operator<<(std::ostream &outputStream,
+									const GestionnaireUtilisateurs &gestionnaireUtilisateurs);
 
-    // Opérations d'ajout et de suppression
-    bool chargerDepuisFichier(const std::string& nomFichier);
-    bool ajouterUtilisateur(const Utilisateur& utilisateur);
-    bool supprimerUtilisateur(const std::string& idUtilisateur);
+	// Opérations d'ajout et de suppression
+	bool chargerDepuisFichier(const std::string &nomFichier);
+	bool ajouterUtilisateur(const Utilisateur &utilisateur);
+	bool supprimerUtilisateur(const std::string &idUtilisateur);
 
-    // Getters
-    std::size_t getNombreUtilisateurs() const;
-    const Utilisateur* getUtilisateurParId(const std::string& id) const;
+	// Getters
+	std::size_t getNombreUtilisateurs() const;
+	const Utilisateur *getUtilisateurParId(const std::string &id) const;
 
 private:
-    std::unordered_map<std::string, Utilisateur> utilisateurs_;
+	std::unordered_map<std::string, Utilisateur> utilisateurs_;
 };
 
 #endif // GESTIONNAIREUTILISATEURS_H
