@@ -5,18 +5,18 @@
 #ifndef TESTS_H
 #define TESTS_H
 
-#define TEST_GESTIONNAIRE_UTILISATEURS_ACTIF false
+#define TEST_GESTIONNAIRE_UTILISATEURS_ACTIF true
 #define TEST_FONCTEURS_ACTIF false
 #define TEST_GESTIONNAIRE_FILMS_ACTIF false
 #define TEST_ANALYSEUR_LOGS_ACTIF false
 
 namespace Tests
 {
-    void testAll();
-    double testGestionnaireUtilisateurs();
-    double testFoncteurs();
-    double testGestionnaireFilms();
-    double testAnalyseurLogs();
+void testAll();
+double testGestionnaireUtilisateurs();
+double testFoncteurs();
+double testGestionnaireFilms();
+double testAnalyseurLogs();
 } // namespace Tests
 
 #endif // TESTS_H
