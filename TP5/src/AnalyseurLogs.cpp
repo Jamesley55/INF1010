@@ -1,6 +1,7 @@
 /// Analyseur de statistiques grâce aux logs.
 /// \author Misha Krieger-Raynauld
 /// \date 2020-01-12
+/// modifié 2020-04-15 par Jamesley Joseph
 
 #include "AnalyseurLogs.h"
 #include <algorithm>

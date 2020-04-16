@@ -46,11 +46,9 @@ GestionnaireFilms &GestionnaireFilms::operator=(GestionnaireFilms other)
 /// \return                     Une référence au stream.
 std::ostream &operator<<(std::ostream &outputStream, const GestionnaireFilms &gestionnaireFilms)
 {
-	// TODO: Uncomment une fois que la fonction getNombreFilms est écrite
 	outputStream << "Le gestionnaire de films contient " << gestionnaireFilms.getNombreFilms() << " films.\n"
 				 << "Affichage par catégories:\n";
 
-	// TODO: Réécrire l'implémentation avec des range-based for et structured bindings (voir énoncé du TP)
 	for (const auto &[key, value] : gestionnaireFilms.filtreGenreFilms_)
 	{
 		Film::Genre genre = key;
@@ -165,7 +163,7 @@ std::size_t GestionnaireFilms::getNombreFilms() const
 
 /// Retourne une copie de la liste des films appartenant à un genre donné
 /// \param genre        Le genre des films a trouver
-/// \return             Un vecteur de pointeur vers les film trouve ou un  vecteur vide si aucun film du genre a ete trouver.
+/// \return             Un vecteur de pointeur vers les films trouvees ou un  vecteur vide si aucun film du genre a ete trouver.
 std::vector<const Film *> GestionnaireFilms::getFilmsParGenre(Film::Genre genre) const
 {
 	return filtreGenreFilms_.find(genre) == filtreGenreFilms_.end() ? std::vector<const Film *>() : (filtreGenreFilms_.find(genre)->second);
@@ -173,7 +171,7 @@ std::vector<const Film *> GestionnaireFilms::getFilmsParGenre(Film::Genre genre)
 
 /// Retourne une copie de la liste des films appartenant à un pays donné
 /// \param pays         Le pays des films a trouver
-/// \return             Un vecteur de pointeur vers les film trouve ou un  vecteur vide si aucun film du pays a ete  retrouver
+/// \return             Un vecteur de pointeur vers les films trouvees ou un  vecteur vide si aucun film du pays a ete  retrouver
 std::vector<const Film *> GestionnaireFilms::getFilmsParPays(Pays pays) const
 {
 	return filtrePaysFilms_.find(pays) == filtrePaysFilms_.end() ? std::vector<const Film *>() : (filtrePaysFilms_.find(pays)->second);

@@ -14,9 +14,8 @@ public:
 	/// \param bornInferieurAnnee               la borne inferieur d'annee dans l'interval
 	/// \param bornSuperieurAnnee               la borne superieur d'annee dans l'interval
 	EstDansIntervalleDatesFilm(int borneInferieurAnnee,
-							   int BorneSuperieurAnnee)
-		: borneInferieurAnnee_(borneInferieurAnnee),
-		  borneSuperieurAnnee_(BorneSuperieurAnnee)
+							   int BorneSuperieurAnnee) : borneInferieurAnnee_(borneInferieurAnnee),
+														  borneSuperieurAnnee_(BorneSuperieurAnnee)
 	{
 	}
 
