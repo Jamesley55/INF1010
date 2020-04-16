@@ -120,14 +120,14 @@ const Film *GestionnaireFilms::getFilmParNom(const std::string &nom) const
 /// \return             un bollean qui defini si l'operation a ete un succes ou non
 bool GestionnaireFilms::ajouterFilm(const Film &film)
 {
+
 	if (getFilmParNom(film.nom) == nullptr)
 	{
-
 		films_.push_back(std::make_unique<Film>(film));
-		const Film *filmPtr = films_.back().get();
-		filtreGenreFilms_[film.genre].push_back(filmPtr);
-		filtrePaysFilms_[film.pays].push_back(filmPtr);
-		return filtreNomFilms_.emplace(film.nom, filmPtr).second;
+		const Film *prtFilm = films_.back().get();
+		filtreGenreFilms_[film.genre].push_back(prtFilm);
+		filtrePaysFilms_[film.pays].push_back(prtFilm);
+		return filtreNomFilms_.emplace(film.nom, prtFilm).second;
 	}
 	return false;
 }
@@ -140,18 +140,17 @@ bool GestionnaireFilms::supprimerFilm(const std::string &nomFilm)
 	auto *film = getFilmParNom(nomFilm);
 	if (film != nullptr)
 	{
-		// code a ignorer losque j'initialise de cette facon avec ou avec auto les tests ne fonctionnent pas ??
-		{
-			std::vector<const Film *> genreFilm = filtreGenreFilms_[film->genre]; //  ignorer
-			std::vector<const Film *> paysFilm = filtrePaysFilms_[film->pays];	  // ignorer
-		}
 
-		filtreGenreFilms_[film->genre].erase(std::remove(filtreGenreFilms_[film->genre].begin(), filtreGenreFilms_[film->genre].end(), film),
-											 filtreGenreFilms_[film->genre].end());
-		filtrePaysFilms_[film->pays].erase(std::remove(filtrePaysFilms_[film->pays].begin(), filtrePaysFilms_[film->pays].end(), film),
-										   filtrePaysFilms_[film->pays].end());
+		auto *genreFilm = &filtreGenreFilms_[film->genre];
+		auto *paysFilm = &filtrePaysFilms_[film->pays];
+
+		genreFilm->erase(std::remove(genreFilm->begin(), genreFilm->end(), film),
+						 genreFilm->end());
+		paysFilm->erase(std::remove(paysFilm->begin(), paysFilm->end(), film),
+						paysFilm->end());
 		films_.erase(std::remove_if(films_.begin(), films_.end(), [nomFilm](std::unique_ptr<Film> &film) { return film->nom == nomFilm; }),
 					 films_.end());
+
 		return filtreNomFilms_.erase(nomFilm);
 	}
 	return false;
@@ -174,19 +173,21 @@ std::vector<const Film *> GestionnaireFilms::getFilmsParGenre(Film::Genre genre)
 
 /// Retourne une copie de la liste des films appartenant à un pays donné
 /// \param pays         Le pays des films a trouver
-/// \return             Un vecteur de pointeur vers les film trouve ou un  vecteur vide si aucun film du pays.
+/// \return             Un vecteur de pointeur vers les film trouve ou un  vecteur vide si aucun film du pays a ete  retrouver
 std::vector<const Film *> GestionnaireFilms::getFilmsParPays(Pays pays) const
 {
 	return filtrePaysFilms_.find(pays) == filtrePaysFilms_.end() ? std::vector<const Film *>() : (filtrePaysFilms_.find(pays)->second);
 }
 
-/// Retourne une copie de la liste des films appartenant entre deux annees donné.
-/// \param anneeDebut   L'annee de la borne inferieure de l'intervalle de recherche.
-/// \param anneeFin     L'annee de la borne superieure de l'intervalle de recherche.
-/// \return             Un vecteur de pointeur vers les film dans l'intervalle, vecteur vide si aucun film.
+/// Retourne  une  liste  des  films  produits  entre  deux  années  passées  en  paramètre
+/// \param anneeDebut   L'annee de debut dans l'intervalle de recherche.
+/// \param anneeFin     L'annee de film dans l'intervalle de recherche.
+/// \return             Un vecteur de pointeur vers les film dans l'intervalle ou un vecteur vide si aucun film a ete trouver
 std::vector<const Film *> GestionnaireFilms::getFilmsEntreAnnees(int anneeDebut, int anneeFin)
 {
 	std::vector<const Film *> film;
-	std::copy_if(films_.begin(), films_.end(), RawPointerBackInserter(film), EstDansIntervalleDatesFilm(anneeDebut, anneeFin));
+	std::copy_if(films_.begin(), films_.end(),
+				 RawPointerBackInserter(film),
+				 EstDansIntervalleDatesFilm(anneeDebut, anneeFin));
 	return film;
 }
